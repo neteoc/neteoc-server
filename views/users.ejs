@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+  <head>
+    <meta></meta>
+    <title>user</title>
+  </head>
+  <body>
+    <h1>User</h1>
+
+    <div>
+      <%=user.displayName%>
+      <img src="<%=user.avatarUrl%>"></img>
+    </div>
+    <script>
+    window.opener.location.reload();
+    window.close();
+    </script>
+  </body>
+</html>
