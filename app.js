@@ -49,9 +49,9 @@ app.use(passport.session());
 const AuthTools = require('./modules/auth/auth.tools');
 
 app.use('/auth', require('./modules/auth/routes')(app));
-app.use('/lists', require('./modules/lists/lists.routes')(app));
-app.use('/message', require('./modules/message/message.routes')(app));
-app.use('/user',  require('./modules/user/user.routes')(app));
+app.use('/lists', AuthTools.denyNotLoggedIn, require('./modules/lists/lists.routes')(app));
+app.use('/message', AuthTools.denyNotLoggedIn, require('./modules/message/message.routes')(app));
+app.use('/user', AuthTools.denyNotLoggedIn,  require('./modules/user/user.routes')(app));
 
 require('./config/passport')();
 require('./routes')(app, passport, express);

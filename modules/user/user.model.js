@@ -33,7 +33,18 @@ var UserSchema = new Schema({
 	paymentinfo: {
 		type: String
 	},
-	contactinfo: {},
+	flareemail: {
+		type: String
+	},
+	flaresms: {
+		type: String
+	},
+	flaretel: {
+		type: String
+	},
+    status: {
+	    type: String
+    },
 	providerData: {},
 	additionalProvidersData: {},
 	messagesSent : [{ type: Schema.Types.ObjectId, ref: 'Message' }],

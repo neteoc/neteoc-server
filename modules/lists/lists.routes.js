@@ -11,14 +11,26 @@ module.exports = function() {
             List.all(req, res, next)
         })
         .post(function(req, res, next){
-            List.create(req, res, next, req.body.name, req.body.discription)
+            List.create(req, res, next)
         })
         .put(function(req, res, next){
-            List.adduser(req, res, next)
+            List.update(req, res, next)
         })
         .delete(function (req, res, next) {
             List.deletelist(req, res, next)
         });
+
+    router.route('/:listId')
+        .get(function(req, res, next){
+            List.findById(req, res, next)
+        })
+        .put(function(req, res, next){
+            List.updateById(req, res, next)
+        })
+        .delete(function (req, res, next) {
+            List.deletelist(req, res, next)
+        });
+
 
 
     router.route('/find')

@@ -1,11 +1,15 @@
 'use strict';
 
 
+var express = require('express');
+
 // route middleware to make sure a user is logged in
 exports.denyNotLoggedIn = function (req, res, next) {
 
     // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
+    if (req.isAuthenticated()  && req.user.status === "approved" || process.env.NODE_ENV == "development" )
+        //console.log(req.user);
+        //req.user.status;
         return next();
 
     // if they aren't redirect them to the home page

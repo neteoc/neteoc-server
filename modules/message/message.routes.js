@@ -4,6 +4,8 @@ var Message = require('./message.controllers');
 var router = express.Router();
 
 
+
+
 module.exports = function() {
 
     router.route('/')
@@ -13,6 +15,13 @@ module.exports = function() {
         .post(function(req, res, next){
             Message.send(req, res, next)
         });
+
+
+    router.route('/:msgId')
+        .get(function(req, res, next){
+            Message.findById(req, res, next)
+        });
+
 
 
     return router;

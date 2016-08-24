@@ -8,8 +8,13 @@ User = require('mongoose').model('User');
 
 exports.all = function(req, res, next){
 
+    //req.user._id
+    //PersonModel.find({ favouriteFoods: "sushi" }, ...);
+    //console.log(req);
+    //res.send(req.user);
+
     List
-        .find({})
+        .find({ members: req.user._id})
         .exec(function (err, lists) {
             if (err) return handleError(err);
             //console.log('The creator is %s', message._author.name);
@@ -18,12 +23,41 @@ exports.all = function(req, res, next){
         });
 };
 
+exports.findById = function(req, res, next) {
+    List.findById(req.params.listId)
+        .populate('members')
+        .exec(function(err, list){
+        res.send(list)
+    });
+};
 
-exports.create = function(req, res, next, name, discription){
+exports.findByIdPopulated = function(req, res, next) {
+    List.findById(req.params.listId)
+        .populate('members')
+        .exec(function(err, list){
+            res.send(list)
+        });
+};
 
-    List.findOrCreate({name: name}, {discription: discription}, function(err, list, created){
+exports.updateById = function(req, res, next) {
+    List.findById(req.params.listId, function(err, list){
+        //console.log(list);
+        //res.send(list)
+        list.name = req.body.data.name;
+        list.discription = req.body.data.discription;
+        list.admins = req.body.data.admins;
+        list.members = req.body.data.members;
+        list.save();
         res.send(list);
     });
+};
+
+
+
+exports.create = function(req, res, next){
+        List.findOrCreate({name: req.body.data.name}, {discription: req.body.data.discription}, function(err, list, created){
+        res.send(list);
+        });
 
 
 };
@@ -76,7 +110,7 @@ exports.removeuser = function(req, res, next){
 
 exports.deletelist = function(req, res, next){
 
-    List.findOneAndRemove({'name' : req.body.list.name}, function (err,offer){
+    List.findOneAndRemove({'_id' : req.params.listId}, function (err, list){
             res.send({status: "removed"});
         });
 };

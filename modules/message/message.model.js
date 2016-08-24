@@ -21,7 +21,7 @@ var MessageSchema = new Schema({
 		type: String,
 		trim: true
 	},
-	author: { type: Number, ref: 'User' },
+	author: { type: String, ref: 'User' },
 	list: { type: String, ref: 'List' },
 	additionalData: {}
 
