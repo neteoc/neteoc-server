@@ -52,6 +52,7 @@ app.use('/auth', require('./modules/auth/routes')(app));
 app.use('/lists', AuthTools.denyNotLoggedIn, require('./modules/lists/lists.routes')(app));
 app.use('/message', AuthTools.denyNotLoggedIn, require('./modules/message/message.routes')(app));
 app.use('/user', AuthTools.denyNotLoggedIn,  require('./modules/user/user.routes')(app));
+app.use('/twil', AuthTools.denyNotLoggedIn,  require('./modules/twilpub/twilpub.routes')(app));
 
 require('./config/passport')();
 require('./routes')(app, passport, express);
