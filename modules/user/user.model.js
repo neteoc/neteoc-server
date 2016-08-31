@@ -45,11 +45,16 @@ var UserSchema = new Schema({
     status: {
 	    type: String
     },
+	roles: [],
+    isSiteAdmin: Boolean,
 	providerData: {},
 	additionalProvidersData: {},
 	messagesSent : [{ type: Schema.Types.ObjectId, ref: 'Message' }],
 	messagesReceived : [{ type: Schema.Types.ObjectId, ref: 'Message' }]
 
-});
+	},
+	{
+		timestamps: true
+	});
 
 module.exports = mongoose.model('User', UserSchema);

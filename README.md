@@ -1,2 +1,1 @@
-# neteoc-server
-Node back-end for NetEOC
+# NetEOC-Server

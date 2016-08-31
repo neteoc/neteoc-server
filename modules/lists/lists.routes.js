@@ -13,9 +13,6 @@ module.exports = function() {
         .post(function(req, res, next){
             List.create(req, res, next)
         })
-        .put(function(req, res, next){
-            List.update(req, res, next)
-        })
         .delete(function (req, res, next) {
             List.deletelist(req, res, next)
         });

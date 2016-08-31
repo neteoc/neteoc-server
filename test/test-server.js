@@ -1,3 +1,11 @@
+
+process.env.GOOGLE_OAUTH_CLIENT_ID = "123456"
+process.env.GOOGLE_OAUTH_CLIENT_SECRET = "123456"
+process.env.GOOGLE_OAUTH_CALLBACK = "http://localhost:1212/callback"
+process.env.PORT = "1212"
+process.env.FLARE_DB = "dockerhost/flartdevtest"
+
+
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../app.js');

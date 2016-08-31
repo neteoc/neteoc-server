@@ -15,11 +15,15 @@ var ListSchema = new Schema({
         trim: true,
         default: ''
     },
+    owner: { type: String, ref: 'User' },
     admins: [{ type: String, ref: 'User' }],
     members: [{ type: String, ref: 'User' }],
     additionalData: {}
+    },
+    {
+        timestamps: true
+    });
 
-});
 
 ListSchema.plugin(findOrCreate);
 

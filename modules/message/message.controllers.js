@@ -6,12 +6,14 @@ var Message = require('./message.model.js');
 var amqp = require('amqplib/callback_api');
 
 
-var formatnumber = function(number){
+var formatnumber2 = function(number){
 
     var PNF = require('google-libphonenumber').PhoneNumberFormat;
     var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
     var phoneNumber = phoneUtil.parse(number, 'US');
-    var formatedNumber = phoneUtil.format(phoneNumber, PNF.E164);
+    var formatedNumber = phoneUtil.format(phoneNumber, PNF.E164, function(error){
+        console.log(error);
+    });
 
     /**
     console.log(phoneUtil.format(phoneNumber, PNF.RFC3966));
@@ -20,6 +22,30 @@ var formatnumber = function(number){
     console.log(phoneUtil.format(phoneNumber, PNF.NATIONAL));
     **/
     return formatedNumber;
+};
+
+var formatnumber = function(srcnumber){
+
+    /**
+    console.log("    ");
+    console.log("==================================");
+    console.log("Formating number:");
+    console.log(srcnumber);
+    console.log("----------------------------------");
+    console.log("    ");
+     **/
+
+    var accountSid = process.env.TWILIO_SID;
+    var authToken = process.env.TWILIO_TOKEN;
+
+    const LookupsClient = require('twilio').LookupsClient;
+    const client = new LookupsClient(accountSid, authToken);
+
+    return client.phoneNumbers(srcnumber).get().then(function(fixnumber){
+        //console.log(fixnumber.phoneNumber);
+        return fixnumber;
+    });
+
 };
 
 
@@ -57,30 +83,43 @@ var sendsms = function(to, message){
     var twilio = require('twilio');
     var client = new twilio.RestClient(accountSid, authToken);
 
+    var destNumber = "";
 
-    (to, function(err, info){
-        console.log(info);
-    });
+    var sms_data = {};
 
-    var sms_data = {
-        body: message,
-        to: formatnumber(to),
-        from: process.env.TWILIO_NUMBER // From a valid Twilio number
+
+    var sendit = function(data){
+
+        if (process.env.NODE_ENV == "production") {
+
+
+             client.messages.create(sms_data, function(err, message) {
+                console.log(message.sid);
+             });
+        } else {
+            console.log("    ");
+            console.log("==================================");
+            console.log("would have sent the following SMS: ");
+            console.log(data);
+            console.log("----------------------------------");
+            console.log("    ");
+        }
     };
 
-    if (process.env.NODE_ENV == "production")
 
-    /** Just testing... move along
-    client.messages.create(sms_data, function(err, message) {
-        console.log(message.sid);
+    formatnumber(to).then(function(number){
+        //console.log("formant number call");
+        //console.log(number.phoneNumber);
+        var data = {
+            body: message,
+            to: number.phoneNumber,
+            from: process.env.TWILIO_NUMBER // From a valid Twilio number
+        };
+        sendit(data);
     });
-     **/
-    console.log("    ");
-    console.log("==================================");
-    console.log("would have sent the following SMS: ");
-    console.log(sms_data);
-    console.log("----------------------------------");
-    console.log("    ");
+
+
+
 };
 
 var sendTEL = function (to, messageid){
@@ -90,30 +129,47 @@ var sendTEL = function (to, messageid){
     var twilio = require('twilio');
     var client = new twilio.RestClient(accountSid, authToken);
 
-    var call_data = {
 
-        to: formatnumber(to),
-        from: process.env.TWILIO_NUMBER,
-        url: process.env.FLARE_URL + '/twil/msg/' +  messageid
+
+    var sendit = function(call_data){
+
+        if (process.env.NODE_ENV == "production") {
+
+            client.makeCall(call_data, function(err, responseData) {
+
+            });
+
+
+
+
+        } else {
+
+
+            console.log("    ");
+            console.log("==================================");
+            console.log("would have sent the following Tel Phone Call: ");
+            console.log(call_data);
+            console.log("----------------------------------");
+            console.log("    ");
+
+        }
 
     };
 
-    /**
-     //Place a phone call, and respond with TwiML instructions from the given URL
-    client.makeCall(call_data, function(err, responseData) {
+    formatnumber(to).then(function(number){
 
-        //executed when the call has been initiated.
-        console.log(responseData.from); // outputs "+14506667788"
+        var call_data = {
+
+            to: number.phoneNumber,
+            from: process.env.TWILIO_NUMBER,
+            url: process.env.FLARE_URL + '/twil/msg/' +  messageid
+
+        };
+        sendit(call_data);
 
     });
-     **/
 
-    console.log("    ");
-    console.log("==================================");
-    console.log("would have sent the following Tel Phone Call: ");
-    console.log(call_data);
-    console.log("----------------------------------");
-    console.log("    ");
+
 };
 
 
@@ -159,11 +215,45 @@ exports.send = function (req, res, next) {
                     subject: newMessage.shortTitle,
                     text: newMessage.content
                 };
-                sendemail(data);
+                //sendemail(data);
 
-                sendsms(member.flaresms, newMessage.shortTitle);
+                /**
+                console.log("    ");
+                console.log("    ");
+                console.log("    ");
+                console.log("==================================");
+                console.log("Starting send process for: ");
+                console.log(member);
+                console.log("----------------------------------");
+                console.log("    ");
+                 **/
 
-                sendTEL(member.flaretel, newMessage.shortTitle);
+                if(member.flaresms) {
+                    sendsms(member.flaresms, newMessage.shortTitle);
+                } else {
+                    /**
+                    console.log("    ");
+                    console.log("    ");
+                    console.log("    ");
+                    console.log("no flaresms");
+                    console.log("==================================");
+                     **/
+                }
+
+
+                if(member.flaretel) {
+                    sendTEL(member.flaretel, newMessage.shortTitle);
+                } else {
+                    /**
+                    console.log("    ");
+                    console.log("    ");
+                    console.log("    ");
+                    console.log("no flaretel")
+                    console.log("==================================");
+                     **/
+                }
+
+
 
 
             });

@@ -1,7 +1,7 @@
 'use strict';
 
 var List = require('./lists.models');
-User = require('mongoose').model('User');
+var User = require('mongoose').model('User');
 
 
 
@@ -14,7 +14,7 @@ exports.all = function(req, res, next){
     //res.send(req.user);
 
     List
-        .find({ members: req.user._id})
+        .find({ admins: req.user._id})
         .exec(function (err, lists) {
             if (err) return handleError(err);
             //console.log('The creator is %s', message._author.name);
@@ -23,6 +23,8 @@ exports.all = function(req, res, next){
         });
 };
 
+
+
 exports.findById = function(req, res, next) {
     List.findById(req.params.listId)
         .populate('members')
@@ -30,6 +32,7 @@ exports.findById = function(req, res, next) {
         res.send(list)
     });
 };
+
 
 exports.findByIdPopulated = function(req, res, next) {
     List.findById(req.params.listId)
@@ -41,21 +44,21 @@ exports.findByIdPopulated = function(req, res, next) {
 
 exports.updateById = function(req, res, next) {
     List.findById(req.params.listId, function(err, list){
-        //console.log(list);
+        console.log(list);
         //res.send(list)
-        list.name = req.body.data.name;
-        list.discription = req.body.data.discription;
-        list.admins = req.body.data.admins;
-        list.members = req.body.data.members;
+        list.name = req.body.name;
+        list.discription = req.body.discription;
+        list.admins = req.body.admins;
+        list.members = req.body.members;
         list.save();
-        res.send(list);
+        res.send(req.body);
     });
 };
 
 
 
 exports.create = function(req, res, next){
-        List.findOrCreate({name: req.body.data.name}, {discription: req.body.data.discription}, function(err, list, created){
+        List.findOrCreate({name: req.body.data.name}, {discription: req.body.data.discription, admins: [req.user._id]}, function(err, list, created){
         res.send(list);
         });
 

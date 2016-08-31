@@ -12,6 +12,9 @@ var GroupSchema = new Schema({
 	member: [{ type: Number, ref: 'User' }],
 	additionalData: {}
 
-});
+	},
+	{
+		timestamps: true
+	});
 
 module.exports = mongoose.model('Group', GroupSchema);

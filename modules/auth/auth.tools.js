@@ -17,6 +17,17 @@ exports.denyNotLoggedIn = function (req, res, next) {
 };
 
 
+exports.denyNotAdmin = function (req, res, next) {
+
+    if (req.isAuthenticated()  && req.user.status === "approved" || process.env.NODE_ENV == "development" ) {
+        if (req.user.isSiteAdmin) {
+            return next();
+        }
+    }
+
+    res.status(401).send({ error: "401" });
+
+};
 
 // route middleware to make sure a user is logged in
 exports.isLoggedIn = function (req, res, next) {

@@ -8,7 +8,7 @@ module.exports = function() {
 
     router.route('/')
         .get(function(req, res, next){
-            res.send("hello")
+            User.find(req, res, next);
 
         })
         .post(function(req, res, next){
@@ -23,7 +23,6 @@ module.exports = function() {
         .put(function (req, res, next) {
            User.updateById(req, res, next);
         });
-
 
     return router;
 };

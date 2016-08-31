@@ -65,7 +65,7 @@ router.route('/google')
             }).then(function(charge) {
                 // YOUR CODE: Save the customer ID and other info in a database for later!
                 //console.log(session.session);
-                console.log(charge);
+                //console.log(charge);
                 res.redirect('/Flares/user/account');
             });
 

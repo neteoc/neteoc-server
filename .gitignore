@@ -38,6 +38,8 @@ jspm_packages
 
 
 node_modules
-docker-compose*
+*compose*.yml
 env.sh
 .idea
+
+public

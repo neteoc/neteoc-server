@@ -25,6 +25,9 @@ var MessageSchema = new Schema({
 	list: { type: String, ref: 'List' },
 	additionalData: {}
 
-});
+    },
+	{
+		timestamps: true
+	});
 
 module.exports = mongoose.model('Message', MessageSchema);
