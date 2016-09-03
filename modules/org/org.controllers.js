@@ -50,12 +50,20 @@ exports.updateById = function(req, res, next) {
 exports.orgInvite = {};
 
 exports.orgInvite.createInvite = function(req, res, next) {
+
+  var emails = req.body.email.split(",");
+  emails.forEach(function(inviteEmailRaw){
+    let inviteEmail = inviteEmailRaw.trim()
+    console.log("===========" + inviteEmail + "--------------")
+
   OrgInvite.create({
-    email: req.body.email,
+    email: inviteEmail,
     owner: req.user._id,
     org: req.params.orgId,
     status: 'pending'
   }, function(err, invite){
+
+        console.log(invite);
 
         var api_key = process.env.MAILGUN_KEY;
         var domain = process.env.MAILGUN_DOMAIN;
@@ -75,10 +83,14 @@ exports.orgInvite.createInvite = function(req, res, next) {
         });
 
 
-    res.send(invite)
+
   });
 
 
+
+});
+
+res.send({message: "sent"})
 
 };
 
