@@ -56,6 +56,25 @@ exports.orgInvite.createInvite = function(req, res, next) {
     org: req.params.orgId,
     status: 'pending'
   }, function(err, invite){
+
+        var api_key = process.env.MAILGUN_KEY;
+        var domain = process.env.MAILGUN_DOMAIN;
+        var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+
+
+         var data = {
+            from: 'No Reply <noreply@neteoc.com>',
+            to: invite.email,
+            subject: req.user.displayName + ' has invited you to use NetEOC',
+            text: 'Please go to https://neteoc.com/ui/org/' + invite.org + '/invite/' + invite._id + ' to acccpet or deny your invitation'
+        };
+
+
+        mailgun.messages().send(data, function (error, body) {
+
+        });
+
+
     res.send(invite)
   });
 
@@ -76,27 +95,16 @@ exports.orgInvite.findById = function(req, res, next) {
 
 exports.orgInvite.updateById = function(req, res, next) {
   OrgInvite.findById(req.params.inviteId, function(err, invite){
-    console.log(invite);
     invite.status = req.body.status;
     if (invite.status == 'accepted'){
       Org.findById(req.params.orgId, function(err, org){
-          console.log(org);
-
           for(var i =  org.members.length - 1; i >= 0; i--) {
                   if( org.members[i] === req.user._id) {
                       org.members.splice(i, 1);
                   }
               }
-
-
           org.members.push(req.user._id);
-          //res.send(list)
-          //org.name = req.body.name;
-          //org.discription = req.body.discription;
-          //org.admins = req.body.admins;
-          //org.members = req.body.members;
           org.save();
-          console.log(org);
       });
 
     };
