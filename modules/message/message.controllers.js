@@ -177,7 +177,7 @@ var sendTEL = function (to, messageid){
 exports.list = function (req, res, next) {
 
     Message
-        .find({})
+        .find({author: req.user._id})
         .populate('_author')
         .exec(function (err, message) {
             if (err) return handleError(err);
