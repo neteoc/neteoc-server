@@ -12,6 +12,10 @@ module.exports = function() {
         .get(function(req, res, next){
             Twil.voicemessage(req, res, next);
 
+        })
+        .post(function(req, res, next){
+            Twil.voicemessage(req, res, next);
+
         });
 
 
