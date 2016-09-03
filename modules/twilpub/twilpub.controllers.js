@@ -11,7 +11,7 @@ exports.voicemessage = function(req, res, next){
 
     //console.log(fullUrl);
 
-    if (twilio.validateRequest(token, header, fullUrl, req.body) || process.env.NODE_ENV == "development") {
+    //if (twilio.validateRequest(token, header, fullUrl, req.body) || process.env.NODE_ENV == "development") {
 
 
 
@@ -47,10 +47,10 @@ exports.voicemessage = function(req, res, next){
 
 
 
-      } else {
-        res.type('text/plain');
-        res.status(401).send("no soup for you");
-      }
+    //  } else {
+    //    res.type('text/plain');
+    //    res.status(401).send("no soup for you");
+    //  }
 
 
 
