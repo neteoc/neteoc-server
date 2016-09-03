@@ -262,25 +262,7 @@ exports.send = function (req, res, next) {
 
 
 
-    //newMessage.save();
-
-
-/***
-    amqp.connect('amqp://erbgldis:rMoZSWt5CYJQCO1XM4vaMHQXJr4_dvL-@reindeer.rmq.cloudamqp.com/erbgldis', function(err, conn) {
-        conn.createChannel(function(err, ch) {
-            var q = 'createFlare';
-            var msg = req;
-
-            ch.assertQueue(q, {durable: false});
-            // Note: on Node 6 Buffer.from(msg) should be used
-            ch.sendToQueue(q, new Buffer(msg));
-            console.log(" [x] Sent %s", msg);
-        });
-        setTimeout(function() { conn.close(); process.exit(0) }, 500);
-    });
- ***/
-
-    console.log(newMessage);
+    newMessage.save();
 
     res.send(newMessage);
 
@@ -296,6 +278,3 @@ exports.findById = function (req, res, next) {
         });
 
 };
-
-
-
