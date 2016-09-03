@@ -204,6 +204,8 @@ exports.send = function (req, res, next) {
         list: amqmessage.list
     });
 
+    if(process.env.ENABLE_MESSAGING == "true") {
+
     List.findById(newMessage.list)
         .populate('members')
         .exec(function(err, list){
@@ -242,7 +244,7 @@ exports.send = function (req, res, next) {
 
 
                 if(member.flaretel) {
-                    sendTEL(member.flaretel, newMessage.shortTitle);
+                    sendTEL(member.flaretel, newMessage._id);
                 } else {
                     /**
                     console.log("    ");
@@ -260,11 +262,18 @@ exports.send = function (req, res, next) {
 
         });
 
+      newMessage.save();
+
+      res.send(newMessage);
+
+    } else {
+
+      res.send({status: "ENABLE_MESSAGING not true"})
+
+    }
 
 
-    newMessage.save();
 
-    res.send(newMessage);
 
 
 };

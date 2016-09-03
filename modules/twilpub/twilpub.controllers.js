@@ -17,11 +17,19 @@ exports.voicemessage = function(req, res, next){
     }
 
     Message.findById(req.params.msgId)
-        .populate('author')
-        .populate('list')
+        //.populate('author')
+        //.populate('list')
         .exec(function(err, msg){
             //say('Terribly sorry, but an error has occurred. Goodbye.');
+            //console.log(msg);
+            //say("Flare subject ");
+            //twiml.pause({length: 1});
+            say(msg.shortTitle);
+            twiml.pause({length: 1});
+            //say("Fare content ")
+            //twiml.pause({length: 1});
             say(msg.content);
+            twiml.hangup();
             respond();
         });
 

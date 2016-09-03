@@ -30,4 +30,5 @@ var MessageSchema = new Schema({
 		timestamps: true
 	});
 
+
 module.exports = mongoose.model('Message', MessageSchema);

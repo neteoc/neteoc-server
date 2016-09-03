@@ -46,7 +46,7 @@ var UserSchema = new Schema({
 	    type: String
     },
 	roles: [],
-    isSiteAdmin: Boolean,
+  isSiteAdmin: Boolean,
 	providerData: {},
 	additionalProvidersData: {},
 	messagesSent : [{ type: Schema.Types.ObjectId, ref: 'Message' }],
