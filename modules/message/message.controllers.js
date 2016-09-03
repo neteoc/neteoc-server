@@ -50,29 +50,39 @@ var formatnumber = function(srcnumber){
 
 
 var sendemail = function(data){
+
+  console.log("    ");
+  console.log("=========   SENDEMAIL ==============");
+  console.log("----------------------------------");
+  console.log("    ");
+
     var api_key = process.env.MAILGUN_KEY;
     var domain = process.env.MAILGUN_DOMAIN;
     var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
 
-    /**
-     var data = {
-        from: 'Excited User <me@samples.mailgun.org>',
-        to: 'serobnic@mail.ru',
-        subject: 'Hello',
-        text: 'Testing some Mailgun awesomness!'
-    };
-    **/
-    /** Just testing... move along
-    mailgun.messages().send(data, function (error, body) {
-        console.log(body);
-    });
-     **/
-    console.log("    ");
-    console.log("==================================");
-    console.log("Would have sent the following email:");
-    console.log(data);
-    console.log("----------------------------------");
-    console.log("    ");
+        if (process.env.NODE_ENV == "production") {
+        //if (false) {
+
+          console.log(data);
+
+          mailgun.messages().send(data, function (error, body) {
+              console.log(body);
+            });
+
+
+
+
+        } else {
+          console.log("    ");
+          console.log("==================================");
+          console.log("Would have sent the following email:");
+          console.log(data);
+          console.log("----------------------------------");
+          console.log("    ");
+        };
+
+
+
 };
 
 
@@ -88,19 +98,21 @@ var sendsms = function(to, message){
     var sms_data = {};
 
 
-    var sendit = function(data){
+    var sendit = function(sms_data){
 
         if (process.env.NODE_ENV == "production") {
+        //if (true) {
 
 
-             client.messages.create(sms_data, function(err, message) {
-                console.log(message.sid);
+             client.messages.create(sms_data, function(data) {
+                console.log("sent sms");
+                console.log(data);
              });
         } else {
             console.log("    ");
             console.log("==================================");
             console.log("would have sent the following SMS: ");
-            console.log(data);
+            console.log(sms_data);
             console.log("----------------------------------");
             console.log("    ");
         }
@@ -134,6 +146,7 @@ var sendTEL = function (to, messageid){
     var sendit = function(call_data){
 
         if (process.env.NODE_ENV == "production") {
+        //if (false) {
 
             client.makeCall(call_data, function(err, responseData) {
 
@@ -217,7 +230,10 @@ exports.send = function (req, res, next) {
                     subject: newMessage.shortTitle,
                     text: newMessage.content
                 };
-                //sendemail(data);
+                if(member.flareemail) {
+                  sendemail(data);
+                };
+
 
                 /**
                 console.log("    ");
