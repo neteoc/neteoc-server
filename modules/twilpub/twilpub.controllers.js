@@ -7,8 +7,13 @@ exports.voicemessage = function(req, res, next){
     var token = process.env.TWILIO_TOKEN;
     var header = req.headers['x-twilio-signature'];
     var url = process.env.FLARE_URL;
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    if (twilio.validateRequest(token, header, url, req.body) || process.env.NODE_ENV == "development") {
+    //console.log(fullUrl);
+
+    if (twilio.validateRequest(token, header, fullUrl, req.body) || process.env.NODE_ENV == "development") {
+
+
 
           msgdetails = {};
           var twiml = new twilio.TwimlResponse();
