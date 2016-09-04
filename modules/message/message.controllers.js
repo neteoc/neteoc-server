@@ -201,6 +201,21 @@ exports.list = function (req, res, next) {
 
 };
 
+
+exports.received = function (req, res, next) {
+
+    Message
+        .find({recipients: req.user._id})
+        .populate('author')
+        .exec(function (err, message) {
+            if (err) return handleError(err);
+            res.send(message);
+        });
+
+};
+
+
+
 exports.send = function (req, res, next) {
 
     var amqmessage = req.body.data;
@@ -218,11 +233,15 @@ exports.send = function (req, res, next) {
     });
 
     if(process.env.ENABLE_MESSAGING == "true") {
-
+    console.log(newMessage.list);
     List.findById(newMessage.list)
         .populate('members')
         .exec(function(err, list){
+            console.log(list);
             list.members.forEach(function (member) {
+               console.log(member);
+               newMessage.recipients.push(member._id);
+               newMessage.save();
                 var data = {
                     //from: 'Robot Overlord <robot.overlord@neteoc.com>',
                     from: req.user.displayName + ' <' + req.user._id + '@neteoc.com>',
@@ -278,7 +297,7 @@ exports.send = function (req, res, next) {
 
         });
 
-      newMessage.save();
+
 
       res.send(newMessage);
 

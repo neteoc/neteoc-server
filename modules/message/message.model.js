@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
-
+var formatedtimeStamps = require('../schemaPlugins/formatedtimeStamps');
 
 var MessageSchema = new Schema({
 	shortTitle: {
@@ -23,6 +23,7 @@ var MessageSchema = new Schema({
 	},
 	author: { type: String, ref: 'User' },
 	list: { type: String, ref: 'List' },
+	recipients: [{ type: String, ref: 'User' }],
 	additionalData: {}
 
     },
@@ -30,5 +31,7 @@ var MessageSchema = new Schema({
 		timestamps: true
 	});
 
+
+MessageSchema.plugin(formatedtimeStamps);
 
 module.exports = mongoose.model('Message', MessageSchema);

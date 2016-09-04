@@ -36,12 +36,7 @@ exports.create = function(req, res, next){
 
 exports.updateById = function(req, res, next) {
     Org.findById(req.params.orgId, function(err, org){
-        console.log(req.body);
-        //res.send(list)
-        //org.name = req.body.name;
-        //org.discription = req.body.discription;
         org.admins = req.body.admins;
-        //org.members = req.body.members;
         org.save();
         res.send(org);
     });
@@ -76,6 +71,16 @@ exports.orgInvite.createInvite = function(req, res, next) {
       res.send({message: "sent"})
 };
 
+exports.orgInvite.deleteInvite = function(req, res, next) {
+  OrgInvite.findById(req.params.inviteId, function(err, invite){
+     if (invite.owner == req.user._id) {
+       invite.remove();
+     }
+
+  });
+
+};
+
 exports.orgInvite.getInvitesForOrg = function(req, res, net) {
   OrgInvite.find({org: req.params.orgId})
   .populate('acceptedBy')
@@ -85,38 +90,45 @@ exports.orgInvite.getInvitesForOrg = function(req, res, net) {
 };
 
 exports.orgInvite.findById = function(req, res, next) {
-  res.send({message: "hello"})
+  OrgInvite.findById(req.params.inviteId)
+  .exec(function(err, invite){
+    //res.send({status: invite.status, createdAt: invite.createdAt});
+    res.send(invite);
+  });
+
 };
 
 exports.orgInvite.updateById = function(req, res, next) {
   OrgInvite.findById(req.params.inviteId, function(err, invite){
-    invite.status = req.body.status;
-    invite.acceptedBy = req.user._id;
-    if (invite.status == 'accepted'){
-      Org.findById(req.params.orgId, function(err, org){
-          for(var i =  org.members.length - 1; i >= 0; i--) {
-                  if( org.members[i] === req.user._id) {
-                      org.members.splice(i, 1);
+    if (invite.status == 'pending'){
+        invite.status = req.body.status;
+        invite.acceptedBy = req.user._id;
+        if (invite.status == 'accepted'){
+          Org.findById(req.params.orgId, function(err, org){
+              for(var i =  org.members.length - 1; i >= 0; i--) {
+                      if( org.members[i] === req.user._id) {
+                          org.members.splice(i, 1);
+                      }
                   }
+              org.members.push(req.user._id);
+              org.save();
+          });
+          //console.log(mongoose.Types.ObjectId(req.user._id));
+          //.find({_id: ObjectId('57cb9382df98e02d03c87f42')})
+          User.findById(req.user._id)
+          .exec(function(err, user){
+              if (!user.flareemail) {
+                user.flareemail = invite.email;
+                user.save();
               }
-          org.members.push(req.user._id);
-          org.save();
-      });
-      //console.log(mongoose.Types.ObjectId(req.user._id));
-      //.find({_id: ObjectId('57cb9382df98e02d03c87f42')})
-      User.findById(req.user._id)
-      .exec(function(err, user){
-          console.log(user);
-          if (!user.flareemail) {
-            user.flareemail = invite.email;
-            console.log(user);
-            user.save();
-          }
-      });
+          });
 
-    };
+        };
 
-    invite.save();
-    res.send({message: 'saved'});
+        invite.save();
+        res.send({message: 'saved'});
+    }  else {
+      res.send({message: 'not changed'});
+    }
   })
 };

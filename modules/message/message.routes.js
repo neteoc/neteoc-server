@@ -16,6 +16,11 @@ module.exports = function() {
             Message.send(req, res, next)
         });
 
+    router.route('/received')
+        .get(function(req, res, next){
+            Message.received(req, res, next)
+        });
+
 
     router.route('/:msgId')
         .get(function(req, res, next){

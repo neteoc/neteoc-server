@@ -22,6 +22,9 @@ module.exports = function() {
       })
       .post(function(req, res, next){
         Org.orgInvite.createInvite(req, res, next);
+      })
+      .delete(function(req, res, next){
+        Org.orgInvite.deleteInvite(req, res, next);
       });
 
 

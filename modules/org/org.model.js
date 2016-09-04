@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 var findOrCreate = require('mongoose-findorcreate');
+var formatedtimeStamps = require('../schemaPlugins/formatedtimeStamps');
+var moment = require('moment-timezone');
 
 var OrgSchema = new Schema({
 	name: String,
@@ -25,13 +27,20 @@ var OrgInviteSchema = new Schema({
   owner: { type: String, ref: 'User' },
 	org: { type: String, ref: 'Org' },
 	acceptedBy: { type: String, ref: 'User' },
-  status: String
+  status: String,
+	additionalData: {}
 	},
 	{
 		timestamps: true
 	});
 
+	OrgInviteSchema.post('init', function(doc) {
+		if (moment(doc.createdAt).diff(moment(), 'days') <= -3 && doc.status == 'pending'){
+			doc.status = 'expired';
+    }
+  });
 
-  OrgSchema.plugin(findOrCreate);
+  OrgInviteSchema.plugin(formatedtimeStamps);
+  OrgInviteSchema.plugin(findOrCreate);
 
 exports.OrgInvite = mongoose.model('OrgInvite', OrgInviteSchema);
