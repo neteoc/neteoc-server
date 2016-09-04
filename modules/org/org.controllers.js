@@ -1,5 +1,5 @@
 'use strict';
-
+var mongoose = require('mongoose');
 var User = require('mongoose').model('User');
 var List = require('mongoose').model('List');
 var Org = require('./org.model').Org;
@@ -54,48 +54,31 @@ exports.orgInvite.createInvite = function(req, res, next) {
   var emails = req.body.email.split(",");
   emails.forEach(function(inviteEmailRaw){
     let inviteEmail = inviteEmailRaw.trim()
-    console.log("===========" + inviteEmail + "--------------")
-
-  OrgInvite.create({
-    email: inviteEmail,
-    owner: req.user._id,
-    org: req.params.orgId,
-    status: 'pending'
-  }, function(err, invite){
-
-        console.log(invite);
-
-        var api_key = process.env.MAILGUN_KEY;
-        var domain = process.env.MAILGUN_DOMAIN;
-        var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
-
-
-         var data = {
-            from: 'No Reply <noreply@neteoc.com>',
-            to: invite.email,
-            subject: req.user.displayName + ' has invited you to use NetEOC',
-            text: 'Please go to https://neteoc.com/ui/org/' + invite.org + '/invite/' + invite._id + ' to acccpet or deny your invitation'
-        };
-
-
-        mailgun.messages().send(data, function (error, body) {
-
+    OrgInvite.create({
+      email: inviteEmail,
+      owner: req.user._id,
+      org: req.params.orgId,
+      status: 'pending'
+    }, function(err, invite){
+          var api_key = process.env.MAILGUN_KEY;
+          var domain = process.env.MAILGUN_DOMAIN;
+          var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+           var data = {
+              from: 'No Reply <noreply@neteoc.com>',
+              to: invite.email,
+              subject: req.user.displayName + ' has invited you to use NetEOC',
+              text: 'Please go to https://neteoc.com/ui/org/' + invite.org + '/invite/' + invite._id + ' to acccpet or deny your invitation'
+          };
+          mailgun.messages().send(data, function (error, body) {
+          });
         });
-
-
-
-  });
-
-
-
-});
-
-res.send({message: "sent"})
-
+      });
+      res.send({message: "sent"})
 };
 
 exports.orgInvite.getInvitesForOrg = function(req, res, net) {
   OrgInvite.find({org: req.params.orgId})
+  .populate('acceptedBy')
   .exec(function(err, invite){
     res.send(invite);
   })
@@ -108,6 +91,7 @@ exports.orgInvite.findById = function(req, res, next) {
 exports.orgInvite.updateById = function(req, res, next) {
   OrgInvite.findById(req.params.inviteId, function(err, invite){
     invite.status = req.body.status;
+    invite.acceptedBy = req.user._id;
     if (invite.status == 'accepted'){
       Org.findById(req.params.orgId, function(err, org){
           for(var i =  org.members.length - 1; i >= 0; i--) {
@@ -117,6 +101,17 @@ exports.orgInvite.updateById = function(req, res, next) {
               }
           org.members.push(req.user._id);
           org.save();
+      });
+      //console.log(mongoose.Types.ObjectId(req.user._id));
+      //.find({_id: ObjectId('57cb9382df98e02d03c87f42')})
+      User.findById(req.user._id)
+      .exec(function(err, user){
+          console.log(user);
+          if (!user.flareemail) {
+            user.flareemail = invite.email;
+            console.log(user);
+            user.save();
+          }
       });
 
     };

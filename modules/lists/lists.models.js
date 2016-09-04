@@ -18,6 +18,7 @@ var ListSchema = new Schema({
     owner: { type: String, ref: 'User' },
     admins: [{ type: String, ref: 'User' }],
     members: [{ type: String, ref: 'User' }],
+    org: {type: String, ref: 'Org'},
     additionalData: {}
     },
     {

@@ -24,6 +24,7 @@ var OrgInviteSchema = new Schema({
   email: String,
   owner: { type: String, ref: 'User' },
 	org: { type: String, ref: 'Org' },
+	acceptedBy: { type: String, ref: 'User' },
   status: String
 	},
 	{
