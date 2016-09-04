@@ -28,6 +28,7 @@ var OrgInviteSchema = new Schema({
 	org: { type: String, ref: 'Org' },
 	acceptedBy: { type: String, ref: 'User' },
   status: String,
+	isArchived: Boolean,
 	additionalData: {}
 	},
 	{

@@ -74,7 +74,9 @@ exports.orgInvite.createInvite = function(req, res, next) {
 exports.orgInvite.deleteInvite = function(req, res, next) {
   OrgInvite.findById(req.params.inviteId, function(err, invite){
      if (invite.owner == req.user._id) {
-       invite.remove();
+       invite.isArchived = true;
+       invite.save();
+       res.send({message: "inviteArchived"})
      }
 
   });
@@ -83,6 +85,7 @@ exports.orgInvite.deleteInvite = function(req, res, next) {
 
 exports.orgInvite.getInvitesForOrg = function(req, res, net) {
   OrgInvite.find({org: req.params.orgId})
+  .where("isArchived").ne(true)
   .populate('acceptedBy')
   .exec(function(err, invite){
     res.send(invite);
@@ -99,7 +102,9 @@ exports.orgInvite.findById = function(req, res, next) {
 };
 
 exports.orgInvite.updateById = function(req, res, next) {
-  OrgInvite.findById(req.params.inviteId, function(err, invite){
+  OrgInvite.findById(req.params.inviteId)
+  .where("isArchived").ne(true)
+  .exec(function(err, invite){
     if (invite.status == 'pending'){
         invite.status = req.body.status;
         invite.acceptedBy = req.user._id;

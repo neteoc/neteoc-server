@@ -22,10 +22,8 @@ module.exports = function() {
       })
       .post(function(req, res, next){
         Org.orgInvite.createInvite(req, res, next);
-      })
-      .delete(function(req, res, next){
-        Org.orgInvite.deleteInvite(req, res, next);
       });
+
 
 
     router.route('/:orgId/invite/:inviteId')
@@ -34,6 +32,9 @@ module.exports = function() {
         })
         .put(function(req, res, next){
           Org.orgInvite.updateById(req, res, next);
+        })
+        .delete(function(req, res, next){
+          Org.orgInvite.deleteInvite(req, res, next);
         });
 
     router.route('/:orgId')
