@@ -6,7 +6,7 @@ var moment = require('moment-timezone');
 
 var OrgSchema = new Schema({
 	name: String,
-  discription: String,
+  description: String,
   owner: { type: String, ref: 'User' },
 	admins: [{ type: String, ref: 'User' }],
 	members: [{ type: String, ref: 'User' }],
