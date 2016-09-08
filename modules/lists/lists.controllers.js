@@ -47,7 +47,7 @@ exports.updateById = function(req, res, next) {
         console.log(list);
         //res.send(list)
         list.name = req.body.name;
-        list.discription = req.body.discription;
+        list.description = req.body.description;
         list.admins = req.body.admins;
         list.members = req.body.members;
         list.save();
@@ -59,7 +59,7 @@ exports.updateById = function(req, res, next) {
 
 exports.create = function(req, res, next){
         List.findOrCreate({name: req.body.data.name}, {
-          discription: req.body.data.discription,
+          description: req.body.data.description,
           admins: [req.user._id],
           org: req.body.data.org
         }, function(err, list, created){
