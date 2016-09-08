@@ -24,7 +24,7 @@ exports.create = function(req, res, next){
         Org.findOrCreate({
           name: req.body.name
         }, {
-          discription: req.body.discription,
+          description: req.body.description,
           admins: [req.user._id],
           members: [req.user._id],
           owner: req.user._id
