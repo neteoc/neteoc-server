@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NetEOC.Messaging.Models;
+using NetEOC.Messaging.Data;
 
 namespace NetEOC.Messaging.Controllers
 {
     [Route("flare")]
     public class FlareController : Controller
     {
+        FlareRepository repo = new FlareRepository();
+
         // GET api/values
         [HttpGet]
         public async Task<ActionResult> Get()
@@ -26,8 +29,13 @@ namespace NetEOC.Messaging.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult> Post([FromBody]Flare flare)
         {
+            Flare result = await repo.Create(flare);
+
+            if (flare != null) return Ok(flare);
+
+            return StatusCode(500);
         }
 
         // PUT api/values/5

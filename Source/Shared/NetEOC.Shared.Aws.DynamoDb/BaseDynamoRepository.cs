@@ -14,11 +14,11 @@ namespace NetEOC.Shared.Aws.DynamoDb
     {
         public abstract string TableName { get; }
 
-        private static AmazonDynamoDBClient client { get; set; }
+        static AmazonDynamoDBClient client { get; set; }
 
         static BaseDynamoRepository()
         {
-            var configSection = ApplicationConfiguration.Configuration.GetSection("DynamoDb");
+            var configSection = ApplicationConfiguration.Configuration.GetSection("dynamodb");
 
             string awsAccessKeyId = configSection["awsAccessKeyId"];
 
@@ -27,7 +27,7 @@ namespace NetEOC.Shared.Aws.DynamoDb
             client = new AmazonDynamoDBClient(awsAccessKeyId, awsSecretKey, Amazon.RegionEndpoint.USEast1);
         }
 
-        public virtual async Task<bool> Create(T obj)
+        public virtual async Task<T> Create(T obj)
         {
             if (obj.Id == Guid.Empty) obj.Id = Guid.NewGuid();
 
@@ -37,7 +37,7 @@ namespace NetEOC.Shared.Aws.DynamoDb
 
             Document result = await table.PutItemAsync(document);
 
-            return true;
+            return obj;
         }
 
         public virtual async Task<T> Get(Guid id)
@@ -60,7 +60,7 @@ namespace NetEOC.Shared.Aws.DynamoDb
             return true;
         }
 
-        public virtual async Task<bool> Update(T obj)
+        public virtual async Task<T> Update(T obj)
         {
             Table table = GetTable(TableName);
 
@@ -68,20 +68,46 @@ namespace NetEOC.Shared.Aws.DynamoDb
 
             await table.UpdateItemAsync(document, obj.Id.ToString());
 
-            return true;
+            return obj;
         }
 
-        private Table GetTable(string tableName)
+        protected virtual async Task<T[]> GetByIndex(string index, string key, string value, int limit = int.MaxValue)
+        {
+            Table table = GetTable(TableName);
+
+            QueryFilter filter = new QueryFilter(key, QueryOperator.Equal, value);
+
+            QueryOperationConfig config = new QueryOperationConfig();
+
+            config.Filter = filter;
+
+            config.IndexName = index;
+
+            config.Limit = limit;
+
+            Search search = table.Query(config);
+
+            List<Document> documents = new List<Document>();
+
+            do
+            {
+                documents.AddRange(await search.GetNextSetAsync());
+            } while (!search.IsDone);
+
+            return !documents.Any() ? new T[0] : documents.Select(ConvertDocumentToObject).ToArray();
+        }
+
+        protected Table GetTable(string tableName)
         {
             return Table.LoadTable(client, tableName);
         }
 
-        private string ConvertToJson(Object obj)
+        protected string ConvertToJson(Object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }
 
-        private T ConvertFromJson(string json)
+        protected T ConvertFromJson(string json)
         {
             return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
             {
@@ -92,12 +118,12 @@ namespace NetEOC.Shared.Aws.DynamoDb
             });
         }
 
-        private Document ConvertObjectToDocument(Object obj)
+        protected Document ConvertObjectToDocument(Object obj)
         {
             return Document.FromJson(ConvertToJson(obj));
         }
 
-        private T ConvertDocumentToObject(Document document)
+        protected T ConvertDocumentToObject(Document document)
         {
             return ConvertFromJson(document.ToJson());
         }
