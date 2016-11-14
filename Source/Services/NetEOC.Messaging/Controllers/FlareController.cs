@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NetEOC.Messaging.Models;
 
 namespace NetEOC.Messaging.Controllers
 {
-    [Route("api/[controller]")]
-    public class ValuesController : Controller
+    [Route("flare")]
+    public class FlareController : Controller
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new Flare());
         }
 
         // GET api/values/5

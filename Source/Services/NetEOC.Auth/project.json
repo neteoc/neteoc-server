@@ -16,7 +16,9 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Newtonsoft.Json": "9.0.1",
-    "AWSSDK.DynamoDBv2": "3.3.0.2"
+    "AWSSDK.DynamoDBv2": "3.3.0.2",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
+    "NetEOC.Shared.Configuration": "1.0.0-*"
   },
 
   "tools": {
