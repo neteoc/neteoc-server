@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace NetEOC.Messaging
 {
@@ -29,6 +30,18 @@ namespace NetEOC.Messaging
         {
             // Add framework services.
             services.AddMvc();
+
+            //enable cors
+            var corsBuilder = new CorsPolicyBuilder();
+            corsBuilder.AllowAnyHeader();
+            corsBuilder.AllowAnyMethod();
+            corsBuilder.AllowAnyOrigin();
+            corsBuilder.AllowCredentials();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", corsBuilder.Build());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +51,7 @@ namespace NetEOC.Messaging
             loggerFactory.AddDebug();
 
             app.UseMvc();
+            app.UseCors("AllowAll");
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
-namespace NetEOC.Auth
+namespace NetEOC.Flare
 {
     public class Startup
     {

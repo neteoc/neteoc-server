@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NetEOC.Messaging.Models;
-using NetEOC.Messaging.Data;
+using NetEOC.Flare.Models;
+using NetEOC.Flare.Data;
 
-namespace NetEOC.Messaging.Controllers
+namespace NetEOC.Flare.Controllers
 {
     [Route("flare")]
     public class FlareController : Controller
@@ -17,7 +17,7 @@ namespace NetEOC.Messaging.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            return Ok(new Flare());
+            return Ok(new Models.Flare());
         }
 
         // GET api/values/5
@@ -29,9 +29,9 @@ namespace NetEOC.Messaging.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody]Flare flare)
+        public async Task<ActionResult> Post([FromBody]Models.Flare flare)
         {
-            Flare result = await repo.Create(flare);
+            Models.Flare result = await repo.Create(flare);
 
             if (flare != null) return Ok(flare);
 

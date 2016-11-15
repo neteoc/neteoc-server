@@ -1,0 +1,32 @@
+﻿//not all sections are necessary but you will likely need the services and Auth0 sections for a .net microservice
+{
+    "services": {
+        "auth": {
+            "endpoint": "{url}"
+        },
+        "messaging": {
+            "endpoint": "{url}"
+        },
+        "flare": {
+            "endpoint": "{url}"
+        }
+    },
+    "Auth0": {
+        "Domain": "{DOMAIN}",
+        "ClientId": "{CLIENT_ID}"
+    },
+    "dynamodb": {
+        "awsAccessKeyId": "{accessKey}",
+        "awsSecretKey": "{secretKey}",
+        "tables": {
+            "modelName": "{tableName}"
+        }
+    },
+    "ses": {
+        "awsAccessKeyId": "{accessKey}",
+        "awsSecretKey": "{secretKey}",
+        "smtpServer": "{url}",
+        "smtpPort": 0,
+        "sender": "{emailAddress}"
+    }
+}

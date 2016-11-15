@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NetEOC.Messaging.Models
+namespace NetEOC.Flare.Models
 {
     public class FlareMessage : BaseDynamoModel
     {
