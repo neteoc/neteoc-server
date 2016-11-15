@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using NetEOC.Shared.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace NetEOC.Flare
 {
@@ -15,15 +17,8 @@ namespace NetEOC.Flare
     {
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
 
-        public IConfigurationRoot Configuration { get; }
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -47,10 +42,28 @@ namespace NetEOC.Flare
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //setup logging
+            loggerFactory.AddConsole(ApplicationConfiguration.Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            //setup auth
+            var keyAsBase64 = ApplicationConfiguration.Configuration["auth0:clientSecret"].Replace('_', '/').Replace('-', '+');
+            var keyAsBytes = Convert.FromBase64String(keyAsBase64);
+            var options = new JwtBearerOptions
+            {
+                TokenValidationParameters =
+                {
+                    ValidIssuer = $"https://{ApplicationConfiguration.Configuration["auth0:domain"]}/",
+                    ValidAudience = ApplicationConfiguration.Configuration["auth0:clientId"],
+                    IssuerSigningKey = new SymmetricSecurityKey(keyAsBytes)
+                }
+            };
+            app.UseJwtBearerAuthentication(options);
+
+            //setup mvc
             app.UseMvc();
+
+            //setup cors
             app.UseCors("AllowAll");
         }
     }

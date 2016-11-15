@@ -15,12 +15,12 @@ namespace NetEOC.Shared.Configuration
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("hosting.json", optional: true)
-                .AddJsonFile("appsettings.json", optional: true)
-                .AddJsonFile("conf.json", optional: true)
-                .AddJsonFile("config.json", optional: true)
-                .AddJsonFile("configs.json", optional: true)
-                .AddJsonFile("configuration.json", optional: true)
+                .AddJsonFile("hosting.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("conf.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("config.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("configs.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("configuration.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables(prefix: "NETEOC_")
                 .Build();
             Configuration = config;

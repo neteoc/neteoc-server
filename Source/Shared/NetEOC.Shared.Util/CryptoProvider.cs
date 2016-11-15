@@ -56,5 +56,10 @@ namespace NetEOC.Shared.Util
         {
             return CreatePassword(64);
         }
+
+        public string CreateUrlKey(int length)
+        {
+            return CreatePassword(length);
+        }
     }
 }

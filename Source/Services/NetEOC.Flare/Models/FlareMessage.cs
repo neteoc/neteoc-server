@@ -17,5 +17,9 @@ namespace NetEOC.Flare.Models
         public long Timestamp { get { return CreateDate.Ticks; } }
 
         public string MessageType { get; set; }
+
+        public string AcknowlegmentToken { get; set; }
+
+        public bool Acknowledged { get; set; }
     }
 }

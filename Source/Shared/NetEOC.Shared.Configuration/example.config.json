@@ -11,9 +11,10 @@
             "endpoint": "{url}"
         }
     },
-    "Auth0": {
-        "Domain": "{DOMAIN}",
-        "ClientId": "{CLIENT_ID}"
+    "auth0": {
+        "domain": "{domain}",
+        "clientId": "{clientId}",
+        "clientSecret" : "{clientSecret}"
     },
     "dynamodb": {
         "awsAccessKeyId": "{accessKey}",
@@ -28,5 +29,9 @@
         "smtpServer": "{url}",
         "smtpPort": 0,
         "sender": "{emailAddress}"
+    },
+    "sns": {
+        "awsAccessKeyId": "{accessKey}",
+        "awsSecretKey": "{secretKey}"
     }
 }

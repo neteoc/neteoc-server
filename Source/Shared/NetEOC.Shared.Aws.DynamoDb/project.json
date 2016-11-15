@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
     "dependencies": {
-        "AWSSDK.DynamoDBv2": "3.3.0.2",
+        "AWSSDK.DynamoDBv2": "3.3.0.3",
         "NetEOC.Shared.Configuration": "1.0.0-*",
         "NETStandard.Library": "1.6.0",
         "Newtonsoft.Json": "9.0.1"

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NetEOC.Flare.Models;
 using NetEOC.Flare.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NetEOC.Flare.Controllers
 {
@@ -13,22 +14,22 @@ namespace NetEOC.Flare.Controllers
     {
         FlareRepository repo = new FlareRepository();
 
-        // GET api/values
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Get()
         {
             return Ok(new Models.Flare());
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
+        [Authorize]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/values
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Post([FromBody]Models.Flare flare)
         {
             Models.Flare result = await repo.Create(flare);
@@ -38,14 +39,14 @@ namespace NetEOC.Flare.Controllers
             return StatusCode(500);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
+        [Authorize]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
+        [Authorize]
         public void Delete(int id)
         {
         }
