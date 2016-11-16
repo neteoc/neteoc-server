@@ -15,7 +15,6 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "NetEOC.Shared.Api": "1.0.0-*",
     "NetEOC.Shared.Aws.DynamoDb": "1.0.0-*",
     "NetEOC.Shared.Configuration": "1.0.0-*",
     "NetEOC.Shared.Util": "1.0.0-*",

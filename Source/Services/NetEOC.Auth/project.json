@@ -22,7 +22,6 @@
     "AWSSDK.DynamoDBv2": "3.3.0.3",
     "NetEOC.Shared.Aws.DynamoDb": "1.0.0-*",
     "NetEOC.Shared.Util": "1.0.0-*",
-    "NetEOC.Shared.Api": "1.0.0-*",
     "SimpleInjector": "3.2.7"  },
 
   "tools": {
