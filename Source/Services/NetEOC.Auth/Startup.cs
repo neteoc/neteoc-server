@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using NetEOC.Shared.Configuration;
+using SimpleInjector;
 
 namespace NetEOC.Auth
 {

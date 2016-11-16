@@ -15,5 +15,7 @@ namespace NetEOC.Auth.Models
         public string Nickname { get; set; }
 
         public string Picture { get; set; }
+
+        public string Email { get; set; }
     }
 }

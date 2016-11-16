@@ -1,4 +1,5 @@
 ﻿using NetEOC.Shared.Aws.DynamoDb;
+using NetEOC.Shared.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,7 @@ namespace NetEOC.Flare.Data
 {
     public class FlareMessageRepository : BaseDynamoRepository<Models.FlareMessage>
     {
-        public override string TableName
-        {
-            get
-            {
-                return "EOCFlareMessage";
-            }
-        }
+        public override string TableName => ApplicationConfiguration.Configuration["dynamodb:tables:flareMessage"];
 
         public async Task<Models.FlareMessage[]> GetByFlareId(Guid flareId)
         {
