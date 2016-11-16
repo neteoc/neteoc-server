@@ -12,10 +12,6 @@ namespace NetEOC.Flare.Models
 
         public Guid RecipientId { get; set; }
 
-        public DateTime CreateDate { get; set; }
-
-        public long Timestamp { get { return CreateDate.Ticks; } }
-
         public string MessageType { get; set; }
 
         public string AcknowlegmentToken { get; set; }

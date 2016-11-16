@@ -14,25 +14,19 @@ namespace NetEOC.Flare.Models
 
         public Guid[] Recipients { get; set; }
 
-        public DateTime CreateDate { get; set; }
-
-        public long Timestamp { get { return CreateDate.Ticks; } }
-
         public bool UseEmail { get; set; }
 
         public bool UseSms { get; set; }
 
         public bool UsePhone { get; set; }
 
-        public string ShortTitle { get; set; }
+        public string Title { get; set; }
 
-        public string LongTitle { get; set; }
+        public string Description { get; set; }
 
-        public string Content { get; set; }
+        public string ShortContent { get; set; }
 
-        public string ShortDescription { get; set; }
-
-        public string LongDescription { get; set; }
+        public string LongContent { get; set; }
 
         public string AttachmentUrl { get; set; }
 

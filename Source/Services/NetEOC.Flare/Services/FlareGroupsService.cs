@@ -16,6 +16,8 @@ namespace NetEOC.Flare.Services
         public FlareGroupService()
         {
             FlareGroupRepository = new FlareGroupRepository();
+
+            UserFlareGroupsService = new UserFlareGroupsService();
         }
 
         public async Task<FlareGroup> CreateFlareGroup(FlareGroup flareGroup)
@@ -23,8 +25,6 @@ namespace NetEOC.Flare.Services
             if (!ValidateFlareGroup(flareGroup)) throw new ArgumentException("Invalid Flare Group!");
 
             flareGroup.Id = Guid.NewGuid();
-
-            flareGroup.CreateDate = DateTime.Now;
 
             if(flareGroup.Members == null)
             {
