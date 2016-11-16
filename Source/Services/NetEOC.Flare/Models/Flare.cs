@@ -10,7 +10,7 @@ namespace NetEOC.Flare.Models
     {
         public Guid SenderId { get; set; }
 
-        public Guid OrganizationId { get; set; }
+        public Guid FlareGroupId { get; set; }
 
         public Guid[] Recipients { get; set; }
 
