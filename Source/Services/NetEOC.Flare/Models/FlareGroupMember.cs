@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace NetEOC.Flare.Models
 {
-    public class UserFlareGroups : BaseDynamoModel
+    public class FlareGroupMember : BaseDynamoModel
     {
-        public List<Guid> FlareGroups { get; set; }
+        public Guid UserId { get; set; }
+
+        public Guid FlareGroupId { get; set; }
     }
 }

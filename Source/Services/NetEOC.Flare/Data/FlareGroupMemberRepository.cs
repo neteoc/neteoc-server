@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace NetEOC.Flare.Data
 {
-    public class UserFlareGroupsRepository : BaseDynamoRepository<UserFlareGroups>
+    public class FlareGroupMemberRepository : BaseDynamoRepository<FlareGroupMember>
     {
-        public override string TableName => ApplicationConfiguration.Configuration["dynamodb:tables:userFlareGroups"];
+        public override string TableName => ApplicationConfiguration.Configuration["dynamodb:tables:flareGroupMembers"];
     }
 }
