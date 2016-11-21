@@ -9,18 +9,18 @@ namespace NetEOC.Flare.Services
 {
     public class UserFlareGroupsService
     {
-        public UserFlareGroupsRepository UserFlareGroupsRepository { get; set; }
+        public FlareGroupMemberRepository FlareGroupMemberRepository { get; set; }
 
         public FlareGroupRepository FlareGroupRepository { get; set; }
 
         public UserFlareGroupsService()
         {
-            UserFlareGroupsRepository = new UserFlareGroupsRepository();
+            FlareGroupMemberRepository = new FlareGroupMemberRepository();
 
             FlareGroupRepository = new FlareGroupRepository();
         }
 
-        public async Task<UserFlareGroups> AddUserToFlareGroup(Guid userId, Guid flareGroupId)
+        public async Task<FlareGroupMember> AddUserToFlareGroup(Guid userId, Guid flareGroupId)
         {
             UserFlareGroups userFlareGroups = await UserFlareGroupsRepository.Get(userId);
 
@@ -56,7 +56,7 @@ namespace NetEOC.Flare.Services
             return userFlareGroups;
         }
 
-        public async Task<UserFlareGroups> RemoveUserFromFlareGroup(Guid userId, Guid flareGroupId)
+        public async Task<FlareGroupMember> RemoveUserFromFlareGroup(Guid userId, Guid flareGroupId)
         {
             UserFlareGroups userFlareGroups = await UserFlareGroupsRepository.Get(userId);
 
