@@ -9,12 +9,12 @@ using NetEOC.Auth.Services;
 
 namespace NetEOC.Auth.Controllers
 {
-    [Route("auth/users")]
-    public class UsersController : Controller
+    [Route("auth/organizations")]
+    public class OrganizationsController : Controller
     {
         public IUserService UserService { get; set; }
 
-        public UsersController()
+        public OrganizationsController()
         {
             UserService = new UserService();
         }
@@ -100,29 +100,6 @@ namespace NetEOC.Auth.Controllers
             }
 
             return StatusCode(401); //the current user isnt authorized to update this user
-        }
-
-        [HttpGet("{id}/valid")]
-        [Authorize]
-        public async Task<ActionResult> ValidateAuthId(Guid id)
-        {
-            string authId = GetAuthIdFromContext();
-
-            bool valid = await UserService.ValidateUser(authId, id);
-
-            return Ok(valid);
-        }
-
-        [Authorize]
-        [HttpGet("claims")]
-        public object Claims()
-        {
-            return User.Claims.Select(c =>
-            new
-            {
-                Type = c.Type,
-                Value = c.Value
-            });
         }
 
         private string GetAuthIdFromContext()

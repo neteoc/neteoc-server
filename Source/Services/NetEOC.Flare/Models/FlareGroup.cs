@@ -8,12 +8,14 @@ namespace NetEOC.Flare.Models
 {
     public class FlareGroup : BaseDynamoModel
     {
-        public Guid OwnerId { get; set; }
+        public Guid AdminId { get; set; }
 
         public List<Guid> Members { get; set; }
 
         public Guid OrganizationId { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 }

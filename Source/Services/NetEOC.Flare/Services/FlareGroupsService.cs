@@ -30,12 +30,12 @@ namespace NetEOC.Flare.Services
             {
                 flareGroup.Members = new List<Guid>();
 
-                flareGroup.Members.Add(flareGroup.OwnerId);
+                flareGroup.Members.Add(flareGroup.AdminId);
             }
 
             flareGroup = await FlareGroupRepository.Create(flareGroup);
 
-            UserFlareGroups userFlareGroups = await UserFlareGroupsService.AddUserToFlareGroup(flareGroup.OwnerId, flareGroup.Id);
+            UserFlareGroups userFlareGroups = await UserFlareGroupsService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
 
             return flareGroup;
         }
@@ -62,9 +62,9 @@ namespace NetEOC.Flare.Services
 
             flareGroup = await FlareGroupRepository.Update(flareGroup);
 
-            if(flareGroup.OwnerId != existing.OwnerId) //see if the group changed owners, if it did, verify that the new owner is a member
+            if(flareGroup.AdminId != existing.AdminId) //see if the group changed owners, if it did, verify that the new owner is a member
             {
-                UserFlareGroups userFlareGroups = await UserFlareGroupsService.AddUserToFlareGroup(flareGroup.OwnerId, flareGroup.Id);
+                UserFlareGroups userFlareGroups = await UserFlareGroupsService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
             }
 
             return flareGroup;
@@ -87,7 +87,7 @@ namespace NetEOC.Flare.Services
 
         private bool ValidateFlareGroup(FlareGroup flareGroup)
         {
-            if (flareGroup.OwnerId == Guid.Empty) throw new ArgumentException("Flare group must have an owner!");
+            if (flareGroup.AdminId == Guid.Empty) throw new ArgumentException("Flare group must have an admin!");
 
             if (flareGroup.OrganizationId == Guid.Empty) throw new ArgumentException("Flare group must have an organization!");
 
