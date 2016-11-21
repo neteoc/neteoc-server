@@ -25,7 +25,7 @@ namespace NetEOC.Auth.Controllers
         {
             string authId = GetAuthIdFromContext();
 
-            User user = await UserService.GetUserByAuthId(authId);
+            User user = await UserService.GetByAuthId(authId);
 
             return Ok(user);
         }
@@ -34,7 +34,7 @@ namespace NetEOC.Auth.Controllers
         [Authorize]
         public async Task<ActionResult> Get(Guid id)
         {
-            return Ok(await UserService.GetUserById(id));
+            return Ok(await UserService.GetById(id));
         }
 
         [HttpPost]
@@ -45,23 +45,23 @@ namespace NetEOC.Auth.Controllers
 
             if (user.Id != Guid.Empty)
             {
-                user = await UserService.UpdateUser(user);
+                user = await UserService.Update(user);
 
                 return Ok(user);
             }
 
-            User existing = await UserService.GetUserByAuthId(user.AuthId);
+            User existing = await UserService.GetByAuthId(user.AuthId);
 
             if(existing != null)
             {
                 user.Id = existing.Id;
 
-                user = await UserService.UpdateUser(user);
+                user = await UserService.Update(user);
 
                 return Ok(user);
             }
 
-            user = await UserService.CreateUser(user);
+            user = await UserService.Create(user);
 
             return Ok(user);
         }
@@ -72,13 +72,13 @@ namespace NetEOC.Auth.Controllers
         {
             user.AuthId = GetAuthIdFromContext();
 
-            bool canUpdate = await UserService.ValidateUser(user.AuthId, id);
+            bool canUpdate = await UserService.Validate(user.AuthId, id);
 
             if (canUpdate)
             {
                 user.Id = id;
 
-                user = await UserService.UpdateUser(user);
+                user = await UserService.Update(user);
 
                 return Ok(user);
             }
@@ -90,16 +90,23 @@ namespace NetEOC.Auth.Controllers
         [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
-            bool canDelete = await UserService.ValidateUser(GetAuthIdFromContext(), id);
+            bool canDelete = await UserService.Validate(GetAuthIdFromContext(), id);
 
             if (canDelete)
             {
-                bool deleted = await UserService.DeleteUser(id);
+                bool deleted = await UserService.Delete(id);
 
                 return Ok(deleted);
             }
 
             return StatusCode(401); //the current user isnt authorized to update this user
+        }
+
+        [HttpGet("{id}/organizations")]
+        [Authorize]
+        public async Task<ActionResult> Organizations(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet("{id}/valid")]
@@ -108,7 +115,7 @@ namespace NetEOC.Auth.Controllers
         {
             string authId = GetAuthIdFromContext();
 
-            bool valid = await UserService.ValidateUser(authId, id);
+            bool valid = await UserService.Validate(authId, id);
 
             return Ok(valid);
         }

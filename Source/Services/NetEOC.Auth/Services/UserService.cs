@@ -11,18 +11,28 @@ namespace NetEOC.Auth.Services
     {
         public UserRepository UserRepository { get; set; }
 
+        public OrganizationRepository OrganizationRepository { get; set; }
+
+        public OrganizationMemberRepository OrganizationMemberRepository { get; set; }
+
+        public OrganizationAdminRepository OrganizationAdminRepository { get; set; }
+
         public UserService()
         {
             UserRepository = new UserRepository();
+
+            OrganizationAdminRepository = new OrganizationAdminRepository();
+
+            OrganizationMemberRepository = new OrganizationMemberRepository();
         }
 
-        public async Task<User> CreateUser(User user)
+        public async Task<User> Create(User user)
         {
             User existing;
 
             if(user.Id != Guid.Empty)
             {
-                existing = await GetUserById(user.Id);
+                existing = await GetById(user.Id);
 
                 if(existing == null)
                 {
@@ -30,7 +40,7 @@ namespace NetEOC.Auth.Services
                 }
             }
 
-            existing = await GetUserByAuthId(user.AuthId);
+            existing = await GetByAuthId(user.AuthId);
 
             if (existing == null)
             {
@@ -39,25 +49,25 @@ namespace NetEOC.Auth.Services
 
             user.Id = existing.Id;
 
-            return await UpdateUser(user);
+            return await Update(user);
         }
 
-        public async Task<bool> DeleteUser(Guid userId)
+        public async Task<bool> Delete(Guid userId)
         {
             return await UserRepository.Delete(userId);
         }
 
-        public async Task<User> GetUserByAuthId(string id)
+        public async Task<User> GetByAuthId(string id)
         {
             return await UserRepository.GetByAuthId(id);
         }
 
-        public async Task<User> GetUserById(Guid id)
+        public async Task<User> GetById(Guid id)
         {
             return await UserRepository.Get(id);
         }
 
-        public async Task<User> UpdateUser(User user)
+        public async Task<User> Update(User user)
         {
             if(user.Id == Guid.Empty || string.IsNullOrWhiteSpace(user.AuthId))
             {
@@ -67,13 +77,24 @@ namespace NetEOC.Auth.Services
             return await UserRepository.Update(user);
         }
 
-        public async Task<bool> ValidateUser(string authId, Guid id)
+        public async Task<bool> Validate(string authId, Guid id)
         {
-            User user = await GetUserById(id);
+            User user = await GetById(id);
 
             if (user == null) return false;
 
             return user.AuthId == authId;
+        }
+
+        public async Task<Guid[]> GetUserOrganizations(Guid userId)
+        {
+            Guid[] memberships = (await OrganizationMemberRepository.GetByUserId(userId)).Select(x => x.OrganizationId).ToArray();
+
+            Guid[] administrations = (await OrganizationAdminRepository.GetByUserId(userId)).Select(x => x.OrganizationId).ToArray();
+
+            Guid[] ownerships = (await OrganizationRepository.GetByOwnerId(userId)).Select(x => x.Id).ToArray();
+
+            return memberships.Concat(administrations).Concat(ownerships).Distinct().ToArray();
         }
     }
 }
