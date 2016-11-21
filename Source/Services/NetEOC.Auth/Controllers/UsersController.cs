@@ -12,7 +12,7 @@ namespace NetEOC.Auth.Controllers
     [Route("auth/users")]
     public class UsersController : Controller
     {
-        public IUserService UserService { get; set; }
+        public UserService UserService { get; set; }
 
         public UsersController()
         {

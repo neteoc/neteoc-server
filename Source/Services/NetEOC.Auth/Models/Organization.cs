@@ -10,10 +10,6 @@ namespace NetEOC.Auth.Models
     {
         public Guid OwnerId { get; set; }
 
-        public List<Guid> Admins { get; set; }
-
-        public List<Guid> Members { get; set; }
-
         public string Name { get; set; }
 
         public string Description { get; set; }

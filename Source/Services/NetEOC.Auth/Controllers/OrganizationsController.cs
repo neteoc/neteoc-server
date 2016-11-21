@@ -12,7 +12,7 @@ namespace NetEOC.Auth.Controllers
     [Route("auth/organizations")]
     public class OrganizationsController : Controller
     {
-        public IUserService UserService { get; set; }
+        public UserService UserService { get; set; }
 
         public OrganizationsController()
         {

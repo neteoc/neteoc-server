@@ -7,7 +7,7 @@ using NetEOC.Auth.Data;
 
 namespace NetEOC.Auth.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
         public UserRepository UserRepository { get; set; }
 

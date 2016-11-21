@@ -11,13 +11,13 @@ namespace NetEOC.Flare.Services
     {
         public FlareGroupRepository FlareGroupRepository { get; set; }
 
-        public UserFlareGroupsService UserFlareGroupsService { get; set; }
+        public FlareGroupMemberService FlareGroupMemberService { get; set; }
 
         public FlareGroupService()
         {
             FlareGroupRepository = new FlareGroupRepository();
 
-            UserFlareGroupsService = new UserFlareGroupsService();
+            FlareGroupMemberService = new FlareGroupMemberService();
         }
 
         public async Task<FlareGroup> CreateFlareGroup(FlareGroup flareGroup)
@@ -35,7 +35,7 @@ namespace NetEOC.Flare.Services
 
             flareGroup = await FlareGroupRepository.Create(flareGroup);
 
-            UserFlareGroups userFlareGroups = await UserFlareGroupsService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
+            FlareGroupMember flareGroupMember = await FlareGroupMemberService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
 
             return flareGroup;
         }
@@ -64,7 +64,7 @@ namespace NetEOC.Flare.Services
 
             if(flareGroup.AdminId != existing.AdminId) //see if the group changed owners, if it did, verify that the new owner is a member
             {
-                UserFlareGroups userFlareGroups = await UserFlareGroupsService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
+                FlareGroupMember flareGroupMember = await FlareGroupMemberService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
             }
 
             return flareGroup;
@@ -79,7 +79,7 @@ namespace NetEOC.Flare.Services
             //remove membership for group from all memebers
             foreach(Guid member in flareGroup.Members)
             {
-                UserFlareGroups userFlareGroups = await UserFlareGroupsService.RemoveUserFromFlareGroup(member, flareGroup.Id);
+                FlareGroupMember flareGroupMember = await FlareGroupMemberService.RemoveUserFromFlareGroup(member, flareGroup.Id);
             }
 
             return await FlareGroupRepository.Delete(id);
