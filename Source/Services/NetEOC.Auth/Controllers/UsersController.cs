@@ -14,9 +14,13 @@ namespace NetEOC.Auth.Controllers
     {
         public UserService UserService { get; set; }
 
+        public OrganizationService OrganizationService { get; set; }
+
         public UsersController()
         {
             UserService = new UserService();
+
+            OrganizationService = new OrganizationService();
         }
 
         [HttpGet]
@@ -106,7 +110,9 @@ namespace NetEOC.Auth.Controllers
         [Authorize]
         public async Task<ActionResult> Organizations(Guid id)
         {
-            throw new NotImplementedException();
+            Guid[] orgs = await UserService.GetUserOrganizations(id);
+
+            return Ok(await Task.WhenAll(orgs.Select(OrganizationService.GetById)));
         }
 
         [HttpGet("{id}/valid")]

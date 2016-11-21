@@ -21,6 +21,8 @@ namespace NetEOC.Auth.Services
         {
             UserRepository = new UserRepository();
 
+            OrganizationRepository = new OrganizationRepository();
+
             OrganizationAdminRepository = new OrganizationAdminRepository();
 
             OrganizationMemberRepository = new OrganizationMemberRepository();
