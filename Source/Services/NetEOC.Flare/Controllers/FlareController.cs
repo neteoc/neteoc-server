@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace NetEOC.Flare.Controllers
 {
     [Route("flare")]
-    public class FlareController : Controller
+    public class FlareController : BaseController
     {
         FlareRepository repo = new FlareRepository();
 

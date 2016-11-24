@@ -79,15 +79,6 @@ namespace NetEOC.Auth.Services
             return await UserRepository.Update(user);
         }
 
-        public async Task<bool> Validate(string authId, Guid id)
-        {
-            User user = await GetById(id);
-
-            if (user == null) return false;
-
-            return user.AuthId == authId;
-        }
-
         public async Task<Guid[]> GetUserOrganizations(Guid userId)
         {
             Guid[] memberships = (await OrganizationMemberRepository.GetByUserId(userId)).Select(x => x.OrganizationId).ToArray();

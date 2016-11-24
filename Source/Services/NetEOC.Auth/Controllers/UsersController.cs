@@ -6,21 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using NetEOC.Auth.Models;
 using NetEOC.Auth.Services;
+using NetEOC.Auth.Integrations.Auth0;
 
 namespace NetEOC.Auth.Controllers
 {
     [Route("auth/users")]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         public UserService UserService { get; set; }
 
         public OrganizationService OrganizationService { get; set; }
+
+        public Auth0UserService Auth0UserService { get; set; }
 
         public UsersController()
         {
             UserService = new UserService();
 
             OrganizationService = new OrganizationService();
+
+            Auth0UserService = new Auth0UserService();
         }
 
         [HttpGet]
@@ -47,13 +52,6 @@ namespace NetEOC.Auth.Controllers
         {
             user.AuthId = GetAuthIdFromContext();
 
-            if (user.Id != Guid.Empty)
-            {
-                user = await UserService.Update(user);
-
-                return Ok(user);
-            }
-
             User existing = await UserService.GetByAuthId(user.AuthId);
 
             if(existing != null)
@@ -62,12 +60,23 @@ namespace NetEOC.Auth.Controllers
 
                 user = await UserService.Update(user);
 
+                Guid claimUserId = GetUserIdFromContext();
+
+                if(claimUserId == Guid.Empty || claimUserId != existing.Id)
+                {
+                    bool updateAuth0IdSuccess = await Auth0UserService.SetUserLocalId(user.AuthId, existing.Id.ToString());
+
+                    return StatusCode(401); //we return not authorized to tell the front end to invalidate the jwt
+                }
+
                 return Ok(user);
             }
 
             user = await UserService.Create(user);
 
-            return Ok(user);
+            bool createAuth0IdSuccess = await Auth0UserService.SetUserLocalId(user.AuthId, user.Id.ToString());
+
+            return StatusCode(401); // we return not authorized to tell the front end to invalidate the jwt
         }
 
         [HttpPut("{id}")]
@@ -76,7 +85,7 @@ namespace NetEOC.Auth.Controllers
         {
             user.AuthId = GetAuthIdFromContext();
 
-            bool canUpdate = await UserService.Validate(user.AuthId, id);
+            bool canUpdate = id == GetUserIdFromContext();
 
             if (canUpdate)
             {
@@ -94,7 +103,7 @@ namespace NetEOC.Auth.Controllers
         [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
-            bool canDelete = await UserService.Validate(GetAuthIdFromContext(), id);
+            bool canDelete = id == GetUserIdFromContext();
 
             if (canDelete)
             {
@@ -113,34 +122,6 @@ namespace NetEOC.Auth.Controllers
             Guid[] orgs = await UserService.GetUserOrganizations(id);
 
             return Ok(await Task.WhenAll(orgs.Select(OrganizationService.GetById)));
-        }
-
-        [HttpGet("{id}/valid")]
-        [Authorize]
-        public async Task<ActionResult> ValidateAuthId(Guid id)
-        {
-            string authId = GetAuthIdFromContext();
-
-            bool valid = await UserService.Validate(authId, id);
-
-            return Ok(valid);
-        }
-
-        [Authorize]
-        [HttpGet("claims")]
-        public object Claims()
-        {
-            return User.Claims.Select(c =>
-            new
-            {
-                Type = c.Type,
-                Value = c.Value
-            });
-        }
-
-        private string GetAuthIdFromContext()
-        {
-            return User.Claims.First(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
         }
     }
 }

@@ -14,7 +14,8 @@
     "auth0": {
         "domain": "{domain}",
         "clientId": "{clientId}",
-        "clientSecret" : "{clientSecret}"
+        "clientSecret": "{clientSecret}",
+        "managementApiToken":  "{managementApiToken}"
     },
     "dynamodb": {
         "awsAccessKeyId": "{accessKey}",
