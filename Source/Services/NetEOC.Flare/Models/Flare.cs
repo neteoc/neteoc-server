@@ -8,6 +8,11 @@ namespace NetEOC.Flare.Models
 {
     public class Flare : BaseDynamoModel
     {
+        public Flare()
+        {
+            Data = new Dictionary<string, string>();
+        }
+
         public Guid SenderId { get; set; }
 
         public Guid FlareGroupId { get; set; }
@@ -38,6 +43,6 @@ namespace NetEOC.Flare.Models
 
         public decimal Longitude { get; set; }
 
-        public string Data { get; set; }
+        public Dictionary<string, string> Data { get; set; }
     }
 }

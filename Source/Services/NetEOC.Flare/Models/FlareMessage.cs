@@ -14,8 +14,10 @@ namespace NetEOC.Flare.Models
 
         public string MessageType { get; set; }
 
-        public string AcknowlegmentToken { get; set; }
+        public string Token { get; set; }
 
         public bool Acknowledged { get; set; }
+
+        public bool Read { get; set; }
     }
 }
