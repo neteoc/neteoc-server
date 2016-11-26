@@ -10,7 +10,7 @@ using NetEOC.Auth.Integrations.Auth0;
 
 namespace NetEOC.Auth.Controllers
 {
-    [Route("auth/users")]
+    [Route("users")]
     public class UsersController : BaseController
     {
         public UserService UserService { get; set; }

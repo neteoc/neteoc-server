@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NetEOC.Auth.Controllers
 {
-    [Route("auth/organizations")]
+    [Route("organizations")]
     public class OrganizationsController : BaseController
     {
         public UserService UserService { get; set; }

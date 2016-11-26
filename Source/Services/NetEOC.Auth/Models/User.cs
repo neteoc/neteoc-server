@@ -8,6 +8,11 @@ namespace NetEOC.Auth.Models
 {
     public class User : BaseDynamoModel
     {
+        public User()
+        {
+            Data = new Dictionary<string, string>(); //verify that data is always at least an empy dictionary
+        }
+
         public string AuthId { get; set; }
 
         public string Name { get; set; }
@@ -23,5 +28,7 @@ namespace NetEOC.Auth.Models
         public string SmsNumber { get; set; }
 
         public bool IsSiteAdmin { get; set; }
+
+        public Dictionary<string, string> Data { get; set; }
     }
 }

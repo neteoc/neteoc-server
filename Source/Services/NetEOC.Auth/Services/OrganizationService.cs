@@ -28,6 +28,13 @@ namespace NetEOC.Auth.Services
         {
             if (!ValidateOrganization(organization)) throw new ArgumentException("Invalid Organization!");
 
+            if(organization.Id != Guid.Empty)
+            {
+                Organization existing = await Update(organization);
+
+                if (existing != null) return existing;
+            }
+
             return await OrganizationRepository.Create(organization);
         }
 
@@ -47,7 +54,32 @@ namespace NetEOC.Auth.Services
 
             if (organization.Id == Guid.Empty) throw new ArgumentException("Organization has no id!");
 
-            return await OrganizationRepository.Update(organization);
+            //merge organization
+
+            Organization existing = await GetById(organization.Id);
+
+            if (existing == null) return null;
+
+            if (!string.IsNullOrWhiteSpace(organization.Name)) existing.Name = organization.Name;
+
+            if (!string.IsNullOrWhiteSpace(organization.Description)) existing.Description = organization.Description;
+
+            if (organization.Data != null)
+            {
+                foreach (var kv in organization.Data)
+                {
+                    if (existing.Data.ContainsKey(kv.Key))
+                    {
+                        existing.Data[kv.Key] = kv.Value;
+                    }
+                    else
+                    {
+                        existing.Data.Add(kv.Key, kv.Value);
+                    }
+                }
+            }
+
+            return await OrganizationRepository.Update(existing);
         }
 
         public async Task<bool> Delete(Guid organizationId)

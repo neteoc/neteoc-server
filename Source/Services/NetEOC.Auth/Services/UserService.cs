@@ -76,7 +76,39 @@ namespace NetEOC.Auth.Services
                 return null;
             }
 
-            return await UserRepository.Update(user);
+            //merge user
+
+            User existing = await GetById(user.Id);
+
+            if (existing == null) return null;
+
+            if (!string.IsNullOrWhiteSpace(user.Email)) existing.Email = user.Email;
+
+            if (!string.IsNullOrWhiteSpace(user.Name)) existing.Name = user.Name;
+
+            if (!string.IsNullOrWhiteSpace(user.Nickname)) existing.Nickname = user.Nickname;
+
+            if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) existing.PhoneNumber = user.PhoneNumber;
+
+            if (!string.IsNullOrWhiteSpace(user.SmsNumber)) existing.SmsNumber = user.SmsNumber;
+
+            if (!string.IsNullOrWhiteSpace(user.Picture)) existing.Picture = user.Picture;
+
+            if(user.Data != null)
+            {
+                foreach(var kv in user.Data)
+                {
+                    if (existing.Data.ContainsKey(kv.Key))
+                    {
+                        existing.Data[kv.Key] = kv.Value;
+                    }else
+                    {
+                        existing.Data.Add(kv.Key, kv.Value);
+                    }
+                }
+            }
+
+            return await UserRepository.Update(existing);
         }
 
         public async Task<Guid[]> GetUserOrganizations(Guid userId)
