@@ -16,5 +16,10 @@ namespace NetEOC.Flare.Data
         {
             return await GetByIndex("OrganizationId-index", "OrganizationId", id.ToString());
         }
+
+        public async Task<FlareGroup[]> GetByOwnerId(Guid id)
+        {
+            return await GetByIndex("OwnerId-index", "OwnerId", id.ToString());
+        }
     }
 }
