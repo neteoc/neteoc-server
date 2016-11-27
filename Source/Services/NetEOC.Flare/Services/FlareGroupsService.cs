@@ -11,13 +11,9 @@ namespace NetEOC.Flare.Services
     {
         public FlareGroupRepository FlareGroupRepository { get; set; }
 
-        public FlareGroupMemberService FlareGroupMemberService { get; set; }
-
         public FlareGroupService()
         {
             FlareGroupRepository = new FlareGroupRepository();
-
-            FlareGroupMemberService = new FlareGroupMemberService();
         }
 
         public async Task<FlareGroup> CreateFlareGroup(FlareGroup flareGroup)
@@ -26,16 +22,7 @@ namespace NetEOC.Flare.Services
 
             flareGroup.Id = Guid.NewGuid();
 
-            if(flareGroup.Members == null)
-            {
-                flareGroup.Members = new List<Guid>();
-
-                flareGroup.Members.Add(flareGroup.AdminId);
-            }
-
             flareGroup = await FlareGroupRepository.Create(flareGroup);
-
-            FlareGroupMember flareGroupMember = await FlareGroupMemberService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
 
             return flareGroup;
         }
@@ -58,14 +45,7 @@ namespace NetEOC.Flare.Services
 
             if (existing == null) throw new ArgumentException("The given flare group does not exist!");
 
-            flareGroup.Members = existing.Members; // we do not currently allow memebers to be updated via the update flare group method
-
             flareGroup = await FlareGroupRepository.Update(flareGroup);
-
-            if(flareGroup.AdminId != existing.AdminId) //see if the group changed owners, if it did, verify that the new owner is a member
-            {
-                FlareGroupMember flareGroupMember = await FlareGroupMemberService.AddUserToFlareGroup(flareGroup.AdminId, flareGroup.Id);
-            }
 
             return flareGroup;
         }
@@ -76,18 +56,12 @@ namespace NetEOC.Flare.Services
 
             if (flareGroup == null) throw new ArgumentException("The given flare group does not exist!");
 
-            //remove membership for group from all memebers
-            foreach(Guid member in flareGroup.Members)
-            {
-                FlareGroupMember flareGroupMember = await FlareGroupMemberService.RemoveUserFromFlareGroup(member, flareGroup.Id);
-            }
-
             return await FlareGroupRepository.Delete(id);
         }
 
         private bool ValidateFlareGroup(FlareGroup flareGroup)
         {
-            if (flareGroup.AdminId == Guid.Empty) throw new ArgumentException("Flare group must have an admin!");
+            if (flareGroup.OwnerId == Guid.Empty) throw new ArgumentException("Flare group must have an admin!");
 
             if (flareGroup.OrganizationId == Guid.Empty) throw new ArgumentException("Flare group must have an organization!");
 

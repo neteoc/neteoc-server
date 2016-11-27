@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using NetEOC.Auth.Models;
 using NetEOC.Auth.Services;
 using NetEOC.Auth.Integrations.Auth0;
+using NSwag.Annotations;
 
 namespace NetEOC.Auth.Controllers
 {
@@ -28,8 +29,8 @@ namespace NetEOC.Auth.Controllers
             Auth0UserService = new Auth0UserService();
         }
 
-        [HttpGet]
-        [Authorize]
+        [Authorize, HttpGet]
+        [SwaggerResponse(typeof(User))]
         public async Task<ActionResult> Get()
         {
             string authId = GetAuthIdFromContext();
@@ -39,15 +40,15 @@ namespace NetEOC.Auth.Controllers
             return Ok(user);
         }
 
-        [HttpGet("{id}")]
-        [Authorize]
+        [Authorize, HttpGet("{id}")]
+        [SwaggerResponse(typeof(User))]
         public async Task<ActionResult> Get(Guid id)
         {
             return Ok(await UserService.GetById(id));
         }
 
-        [HttpPost]
-        [Authorize]
+        [Authorize, HttpPost]
+        [SwaggerResponse(typeof(User))]
         public async Task<ActionResult> Post([FromBody]User user)
         {
             user.AuthId = GetAuthIdFromContext();
@@ -79,8 +80,8 @@ namespace NetEOC.Auth.Controllers
             return StatusCode(401); // we return not authorized to tell the front end to invalidate the jwt
         }
 
-        [HttpPut("{id}")]
-        [Authorize]
+        [Authorize, HttpPut("{id}")]
+        [SwaggerResponse(typeof(User))]
         public async Task<ActionResult> Put(Guid id, [FromBody]User user)
         {
             user.AuthId = GetAuthIdFromContext();
@@ -99,8 +100,8 @@ namespace NetEOC.Auth.Controllers
             return StatusCode(401); //the current user isnt authorized to update this user
         }
 
-        [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize, HttpDelete("{id}")]
+        [SwaggerResponse(typeof(bool))]
         public async Task<ActionResult> Delete(Guid id)
         {
             bool canDelete = id == GetUserIdFromContext();
@@ -115,8 +116,8 @@ namespace NetEOC.Auth.Controllers
             return StatusCode(401); //the current user isnt authorized to update this user
         }
 
-        [HttpGet("{id}/organizations")]
-        [Authorize]
+        [Authorize, HttpGet("{id}/organizations")]
+        [SwaggerResponse(typeof(Organization[]))]
         public async Task<ActionResult> Organizations(Guid id)
         {
             Guid[] orgs = await UserService.GetUserOrganizations(id);

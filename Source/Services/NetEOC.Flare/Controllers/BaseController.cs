@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetEOC.Flare.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         public string GetAuthIdFromContext()
         {

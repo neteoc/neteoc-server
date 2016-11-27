@@ -38,7 +38,7 @@ namespace NetEOC.Flare.Services
 
             if (flareGroup == null) throw new ArgumentException("The given flare group does not exist!");
 
-            flare.Recipients = flareGroup.Members.ToArray();
+            //flare.Recipients = flareGroup.Members.ToArray();
 
             throw new NotImplementedException();
         }

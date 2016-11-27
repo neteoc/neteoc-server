@@ -61,11 +61,11 @@ namespace NetEOC.Auth
             };
             app.UseJwtBearerAuthentication(options);
 
-            //setup mvc
-            app.UseMvc();
-
             //setup cors
             app.UseCors("AllowAll");
+
+            //setup mvc
+            app.UseMvc();
         }
     }
 }

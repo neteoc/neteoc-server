@@ -24,7 +24,8 @@
     "NetEOC.Shared.Util": "1.0.0-*",
     "SimpleInjector": "3.2.7",
     "ServiceStack.HttpClient.Core": "1.0.30",
-    "Auth0.ManagementApi": "3.5.2"  },
+    "Auth0.ManagementApi": "3.5.2",
+    "NetEOC.Shared.Documentation": "1.0.0-*"  },
 
   "tools": {
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
