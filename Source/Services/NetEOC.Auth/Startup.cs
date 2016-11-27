@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using NetEOC.Shared.Configuration;
 using SimpleInjector;
+using NetEOC.Shared.Mvc.ErrorHandling;
 
 namespace NetEOC.Auth
 {
@@ -63,6 +64,9 @@ namespace NetEOC.Auth
 
             //setup cors
             app.UseCors("AllowAll");
+
+            //setup error handling
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             //setup mvc
             app.UseMvc();

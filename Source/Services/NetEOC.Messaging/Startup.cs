@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using NetEOC.Shared.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NetEOC.Shared.Mvc.ErrorHandling;
 
 namespace NetEOC.Messaging
 {
@@ -62,6 +63,9 @@ namespace NetEOC.Messaging
 
             //setup cors
             app.UseCors("AllowAll");
+
+            //setup error handling
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             //setup mvc
             app.UseMvc();

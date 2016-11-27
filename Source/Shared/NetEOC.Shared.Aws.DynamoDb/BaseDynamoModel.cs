@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NetEOC.Shared.Aws.DynamoDb
 {
-    public class BaseDynamoModel
+    public abstract class BaseDynamoModel
     {
         public Guid Id { get; set; }
 
@@ -23,6 +23,23 @@ namespace NetEOC.Shared.Aws.DynamoDb
             set
             {
                 _createDate = value;
+            }
+        }
+
+        private Dictionary<string, string> _data;
+        public Dictionary<string, string> Data
+        {
+            get
+            {
+                if (_data == null)
+                {
+                    _data = new Dictionary<string, string>();
+                }
+                return _data;
+            }
+            set
+            {
+                _data = value;
             }
         }
 

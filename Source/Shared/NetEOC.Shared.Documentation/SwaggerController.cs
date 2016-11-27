@@ -18,7 +18,9 @@ namespace NetEOC.Auth.Controllers
             var settings = new WebApiToSwaggerGeneratorSettings
             {
                 IsAspNetCore = true,
-                DefaultPropertyNameHandling = NJsonSchema.PropertyNameHandling.CamelCase
+                DefaultPropertyNameHandling = NJsonSchema.PropertyNameHandling.CamelCase,
+                Title ="Api specification for " + Assembly.GetEntryAssembly().GetName().Name + " service",
+                Description = "Every service call requires a valid JWT to be processed."
             };
             var generator = new WebApiToSwaggerGenerator(settings);
             var document = generator.GenerateForControllers(controllers);

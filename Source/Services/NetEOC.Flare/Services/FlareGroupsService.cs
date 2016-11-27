@@ -11,18 +11,31 @@ namespace NetEOC.Flare.Services
     {
         public FlareGroupRepository FlareGroupRepository { get; set; }
 
+        public FlareGroupMemberRepository FlareGroupMemberRepository { get; set; }
+
         public FlareGroupService()
         {
             FlareGroupRepository = new FlareGroupRepository();
+
+            FlareGroupMemberRepository = new FlareGroupMemberRepository();
         }
 
         public async Task<FlareGroup> CreateFlareGroup(FlareGroup flareGroup)
         {
             if (!ValidateFlareGroup(flareGroup)) throw new ArgumentException("Invalid Flare Group!");
 
+            if (flareGroup.Id != Guid.Empty)
+            {
+                var existing = await UpdateFlareGroup(flareGroup);
+
+                if (existing != null) return existing;
+
+                flareGroup = await FlareGroupRepository.Create(flareGroup);
+            }
+
             flareGroup.Id = Guid.NewGuid();
 
-            flareGroup = await FlareGroupRepository.Create(flareGroup);
+            
 
             return flareGroup;
         }
