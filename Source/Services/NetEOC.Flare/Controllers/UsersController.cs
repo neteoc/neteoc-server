@@ -15,9 +15,13 @@ namespace NetEOC.Flare.Controllers
     {
         public FlareGroupService FlareGroupService { get; set; }
 
+        public FlareService FlareService { get; set; }
+
         public UsersController()
         {
             FlareGroupService = new FlareGroupService();
+
+            FlareService = new FlareService();
         }
 
         [Authorize, HttpGet("{id}/flaregroups")]
@@ -25,6 +29,13 @@ namespace NetEOC.Flare.Controllers
         public async Task<ActionResult> GetUserFlareGroups(Guid id)
         {
             return Ok(await FlareGroupService.GetFlareGroupsByUserId(id));
+        }
+
+        [Authorize, HttpGet("{id}/flares")]
+        [SwaggerResponse(typeof(Models.Flare[]), Description = "Get all flares sent by the given user.")]
+        public async Task<ActionResult> GetUserFlares(Guid id)
+        {
+            return Ok(await FlareService.GetFlaresBySenderId(id));
         }
     }
 }

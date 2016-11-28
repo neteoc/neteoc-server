@@ -10,7 +10,7 @@ namespace NetEOC.Flare.Models
     {
         public Guid SenderId { get; set; }
 
-        public Guid FlareGroupId { get; set; }
+        public Guid OrganizationId { get; set; }
 
         public Guid[] Recipients { get; set; }
 
@@ -30,12 +30,6 @@ namespace NetEOC.Flare.Models
 
         public string Description { get; set; }
 
-        public string AttachmentUrl { get; set; }
-
-        public string Address { get; set; }
-
-        public decimal Latitude { get; set; }
-
-        public decimal Longitude { get; set; }
+        public string[] Attachments { get; set; }
     }
 }

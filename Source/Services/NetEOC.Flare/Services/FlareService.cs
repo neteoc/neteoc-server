@@ -1,6 +1,7 @@
 ﻿using NetEOC.Flare.Data;
 using NetEOC.Flare.Integrations.Messaging;
 using NetEOC.Flare.Models;
+using NetEOC.Shared.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,39 +18,107 @@ namespace NetEOC.Flare.Services
 
         public FlareGroupService FlareGroupService { get; set; }
 
-        public MessagingService MessagingService { get; set; }
-
-        public FlareService(string authorizationToken)
+        public FlareService()
         {
             FlareRepository = new FlareRepository();
 
             FlareMessageRepository = new FlareMessageRepository();
 
             FlareGroupService = new FlareGroupService();
-
-            MessagingService = new MessagingService(authorizationToken);
         }
 
         public async Task<Models.Flare> SendFlare(Models.Flare flare)
         {
             if (!ValidateFlare(flare)) throw new ArgumentException("Flare is invalid!");
 
-            FlareGroup flareGroup = await FlareGroupService.GetFlareGroupById(flare.FlareGroupId);
+            flare.Id = Guid.NewGuid();
 
-            if (flareGroup == null) throw new ArgumentException("The given flare group does not exist!");
+            CryptoProvider crypt = new CryptoProvider();
 
-            //flare.Recipients = flareGroup.Members.ToArray();
+            if(flare.UseEmail)
+            {
+                FlareMessage[] emails = flare.Recipients.Select(x =>
+                {
+                    return new FlareMessage
+                    {
+                        RecipientId = x,
+                        Token = crypt.CreateUrlKey(),
+                        MessageType = "email",
+                        FlareId = flare.Id,
+                        Read = false,
+                        Acknowledged = false,
+                        Id = Guid.NewGuid()
+                    };
+                }).ToArray();
 
-            throw new NotImplementedException();
+                emails = await Task.WhenAll(emails.Select(FlareMessageRepository.Create));
+            }
+
+            if (flare.UseSms)
+            {
+                FlareMessage[] texts = flare.Recipients.Select(x =>
+                {
+                    return new FlareMessage
+                    {
+                        RecipientId = x,
+                        Token = crypt.CreateUrlKey(),
+                        MessageType = "sms",
+                        FlareId = flare.Id,
+                        Read = false,
+                        Acknowledged = false,
+                        Id = Guid.NewGuid()
+                    };
+                }).ToArray();
+
+                texts = await Task.WhenAll(texts.Select(FlareMessageRepository.Create));
+            }
+
+            if (flare.UsePhone)
+            {
+                FlareMessage[] calls = flare.Recipients.Select(x =>
+                {
+                    return new FlareMessage
+                    {
+                        RecipientId = x,
+                        Token = crypt.CreateUrlKey(),
+                        MessageType = "phone",
+                        FlareId = flare.Id,
+                        Read = false,
+                        Acknowledged = false,
+                        Id = Guid.NewGuid()
+                    };
+                }).ToArray();
+
+                calls = await Task.WhenAll(calls.Select(FlareMessageRepository.Create));
+            }
+
+            return await FlareRepository.Create(flare);
+        }
+
+        public async Task<Models.Flare> GetFlareById(Guid id)
+        {
+            return await FlareRepository.Get(id);
+        }
+
+        public async Task<Models.Flare[]> GetFlaresBySenderId(Guid id)
+        {
+            return await FlareRepository.GetBySenderId(id);
+        }
+
+        public async Task<Models.Flare[]> GetFlaresByOrganizationId(Guid id)
+        {
+            return await FlareRepository.GetByOrganizationId(id);
         }
 
         private bool ValidateFlare(Models.Flare flare)
         {
             if (flare == null) throw new ArgumentException("Must provide a flare to send...");
 
-            if (flare.FlareGroupId == Guid.Empty) throw new ArgumentException("To send a flare you specify a group!");
-
             if (flare.SenderId == Guid.Empty) throw new ArgumentException("To send a flare you specify a sender!");
+
+            if (flare.OrganizationId == Guid.Empty) throw new ArgumentException("To send a flare you must specify an organization!");
+
+            if (flare.Recipients == null || flare.Recipients.Length < 1) throw new ArgumentException("A flare must have recipients!");
 
             return true;
         }

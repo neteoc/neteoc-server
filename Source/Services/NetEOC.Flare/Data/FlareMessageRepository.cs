@@ -21,5 +21,10 @@ namespace NetEOC.Flare.Data
         {
             return await GetByIndex("RecipientId-index", "RecipientId", recipientId.ToString());
         }
+
+        public async Task<FlareMessage> GetByToken(string token)
+        {
+            return (await GetByIndex("Token-index", "Token", token)).FirstOrDefault();
+        }
     }
 }
