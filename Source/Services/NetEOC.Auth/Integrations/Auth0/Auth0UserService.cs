@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ServiceStack;
 using Auth0.ManagementApi;
 using NetEOC.Shared.Configuration;
 using Auth0.ManagementApi.Models;
