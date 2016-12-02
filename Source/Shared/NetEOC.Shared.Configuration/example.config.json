@@ -1,5 +1,13 @@
 ﻿//not all sections are necessary but you will likely need the services and Auth0 sections for a .net microservice
 {
+    "system": {
+        "debug": {
+            "port": 81
+        },
+        "release": {
+            "port": 80
+        }
+    },
     "services": {
         "auth": {
             "endpoint": "{url}"
@@ -15,7 +23,7 @@
         "domain": "{domain}",
         "clientId": "{clientId}",
         "clientSecret": "{clientSecret}",
-        "managementApiToken":  "{managementApiToken}"
+        "managementApiToken": "{managementApiToken}"
     },
     "dynamodb": {
         "awsAccessKeyId": "{accessKey}",

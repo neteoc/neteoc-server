@@ -16,9 +16,9 @@ namespace NetEOC.Messaging
         {
             var host = new WebHostBuilder()
 #if RELEASE
-                .UseUrls("http://*:80")
+                .UseUrls("http://*:" + ApplicationConfiguration.Configuration["system:release:port"])
 #else
-                .UseUrls()
+                .UseUrls("http://*:" + ApplicationConfiguration.Configuration["system:debug:port"])
 #endif
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
