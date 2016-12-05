@@ -14,7 +14,7 @@ namespace NetEOC.Flare.Services
     {
         public FlareRepository FlareRepository { get; set; }
 
-        public FlareMessageRepository FlareMessageRepository { get; set; }
+        public FlareMessageService FlareMessageService { get; set; }
 
         public FlareGroupService FlareGroupService { get; set; }
 
@@ -22,7 +22,7 @@ namespace NetEOC.Flare.Services
         {
             FlareRepository = new FlareRepository();
 
-            FlareMessageRepository = new FlareMessageRepository();
+            FlareMessageService = new FlareMessageService();
 
             FlareGroupService = new FlareGroupService();
         }
@@ -33,66 +33,32 @@ namespace NetEOC.Flare.Services
 
             flare.Id = Guid.NewGuid();
 
+            flare = await FlareRepository.Create(flare);
+
             CryptoProvider crypt = new CryptoProvider();
 
             if(flare.UseEmail)
             {
-                FlareMessage[] emails = flare.Recipients.Select(x =>
-                {
-                    return new FlareMessage
-                    {
-                        RecipientId = x,
-                        Token = crypt.CreateUrlKey(),
-                        MessageType = "email",
-                        FlareId = flare.Id,
-                        Read = false,
-                        Acknowledged = false,
-                        Id = Guid.NewGuid()
-                    };
-                }).ToArray();
+                FlareMessage[] emails = flare.Recipients.Select(x => { return new FlareMessage { RecipientId = x, FlareId = flare.Id }; }).ToArray();
 
-                emails = await Task.WhenAll(emails.Select(FlareMessageRepository.Create));
+                emails = await Task.WhenAll(emails.Select(x=>FlareMessageService.CreateFlareMessage(x, FlareMessageType.Email)));
             }
 
             if (flare.UseSms)
             {
-                FlareMessage[] texts = flare.Recipients.Select(x =>
-                {
-                    return new FlareMessage
-                    {
-                        RecipientId = x,
-                        Token = crypt.CreateUrlKey(),
-                        MessageType = "sms",
-                        FlareId = flare.Id,
-                        Read = false,
-                        Acknowledged = false,
-                        Id = Guid.NewGuid()
-                    };
-                }).ToArray();
+                FlareMessage[] texts = flare.Recipients.Select(x => { return new FlareMessage { RecipientId = x, FlareId = flare.Id }; }).ToArray();
 
-                texts = await Task.WhenAll(texts.Select(FlareMessageRepository.Create));
+                texts = await Task.WhenAll(texts.Select(x => FlareMessageService.CreateFlareMessage(x, FlareMessageType.Sms)));
             }
 
             if (flare.UsePhone)
             {
-                FlareMessage[] calls = flare.Recipients.Select(x =>
-                {
-                    return new FlareMessage
-                    {
-                        RecipientId = x,
-                        Token = crypt.CreateUrlKey(),
-                        MessageType = "phone",
-                        FlareId = flare.Id,
-                        Read = false,
-                        Acknowledged = false,
-                        Id = Guid.NewGuid()
-                    };
-                }).ToArray();
+                FlareMessage[] calls = flare.Recipients.Select(x => { return new FlareMessage { RecipientId = x, FlareId = flare.Id }; }).ToArray();
 
-                calls = await Task.WhenAll(calls.Select(FlareMessageRepository.Create));
+                calls = await Task.WhenAll(calls.Select(x => FlareMessageService.CreateFlareMessage(x, FlareMessageType.PhoneCall)));
             }
 
-            return await FlareRepository.Create(flare);
+            return flare;
         }
 
         public async Task<Models.Flare> GetFlareById(Guid id)
