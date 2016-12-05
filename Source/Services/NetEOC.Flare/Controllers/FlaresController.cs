@@ -16,9 +16,13 @@ namespace NetEOC.Flare.Controllers
     {
         public FlareService FlareService { get; set; }
 
+        public FlareMessageService FlareMessageService { get; set; }
+
         public FlaresController()
         {
             FlareService = new FlareService();
+
+            FlareMessageService = new FlareMessageService();
         }
 
         [Authorize, HttpGet]
@@ -40,6 +44,13 @@ namespace NetEOC.Flare.Controllers
         public async Task<ActionResult> Post([FromBody] Models.Flare flare)
         {
             return Ok(await FlareService.SendFlare(flare));
+        }
+
+        [Authorize, HttpGet("{id}/flaremessages")]
+        [SwaggerResponse(typeof(FlareMessage[]), Description = "Get all flare messages for the flare with the given id.")]
+        public async Task<ActionResult> GetFlareMessages(Guid id)
+        {
+            return Ok(await FlareMessageService.GetFlareMessagesByFlareId(id));
         }
     }
 }
