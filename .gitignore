@@ -254,3 +254,4 @@ paket-files/
 # Configuration files that should not be in the repository 
 config.json
 /src/settings.json
+/src/.serverless/neteoc-api.zip
