@@ -94,6 +94,18 @@ namespace NetEOC.Auth.Services
 
             if (!string.IsNullOrWhiteSpace(user.Picture)) existing.Picture = user.Picture;
 
+            if(user.GeoPosition != null)
+            {
+                if (existing.GeoPosition == null) existing.GeoPosition = new GeoPosition();
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.Accuracy)) existing.GeoPosition.Accuracy = user.GeoPosition.Accuracy;
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.Altitude)) existing.GeoPosition.Altitude = user.GeoPosition.Altitude;
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.AltitudeAccuracy)) existing.GeoPosition.AltitudeAccuracy = user.GeoPosition.AltitudeAccuracy;
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.Heading)) existing.GeoPosition.Heading = user.GeoPosition.Heading;
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.Latitude)) existing.GeoPosition.Latitude = user.GeoPosition.Latitude;
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.Longitude)) existing.GeoPosition.Longitude = user.GeoPosition.Longitude;
+                if (!string.IsNullOrWhiteSpace(user.GeoPosition.Speed)) existing.GeoPosition.Speed = user.GeoPosition.Speed;
+            }
+
             if(user.Data != null)
             {
                 foreach(var kv in user.Data)

@@ -23,5 +23,24 @@ namespace NetEOC.Auth.Models
         public string SmsNumber { get; set; }
 
         public bool IsSiteAdmin { get; set; }
+
+        public GeoPosition GeoPosition { get; set; }
+    }
+
+    public class GeoPosition
+    {
+        public string Accuracy { get; set; }
+
+        public string Altitude { get; set; }
+
+        public string AltitudeAccuracy { get; set; }
+
+        public string Heading { get; set; }
+
+        public string Latitude { get; set; }
+
+        public string Longitude { get; set; }
+
+        public string Speed { get; set; }
     }
 }
