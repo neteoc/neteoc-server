@@ -1,0 +1,57 @@
+service: neteoc-api
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  profile: neteoc
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+         - "s3:ListBucket"
+       Resource:
+         Fn::Join:
+           - ""
+           - - "arn:aws:s3:::"
+             - Ref: ServerlessDeploymentBucket
+    -  Effect: "Allow"
+       Action:
+         - "s3:PutObject"
+       Resource:
+         Fn::Join:
+           - ""
+           - - "arn:aws:s3:::"
+             - Ref : "ServerlessDeploymentBucket"
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+  getUser:
+    handler: handler.getUser
+    events:
+      - http:
+          path: user
+          method: get
+          cors: true
+  saveUser:
+    handler: handler.saveUser
+    events:
+      - http:
+          path: user
+          method: put
+          cors: true
+plugins:
+  - serverless-offline
+
+resources:
+  Resources:
+    usersBucket:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: "neteoc-users"
+
