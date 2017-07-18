@@ -7,6 +7,6 @@ jobs:
    steps:
      - checkout
      - run: cd Source && dotnet restore && dotnet publish
-     - run: ls -R Source/bin/ | awk '
+     - run: ls -R Source/bin/
      - run: ls Source/bin/Release/PublishOutput 
      - run: ssh neteoc:${netEocPass}@${boxIP} && echo $HOSTNAME
