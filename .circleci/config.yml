@@ -15,3 +15,4 @@ jobs:
      - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
      - run: dotnet publish
      - run: ls bin/release/publish 
+     - run: ssh neteoc:${netEocPass}@${boxIP} && echo $HOSTNAME
