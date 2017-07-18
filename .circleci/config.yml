@@ -7,4 +7,4 @@ jobs:
    steps:
      - checkout
      - run: cd Source && dotnet restore && dotnet publish
-     - run: scp -r Source/Services/NetEOC.Auth/bin/Debug/netcoreapp1.0/publish neteoc:${netEocPass}@${boxIP} /home/ubuntu/Auth
+     - run: scp -r Source/Services/NetEOC.Auth/bin/Debug/netcoreapp1.0/publish neteoc:${netEocPass}@${boxIP} /home/ubuntu/delme/
