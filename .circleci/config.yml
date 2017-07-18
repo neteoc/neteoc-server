@@ -6,6 +6,6 @@ jobs:
    working_directory: ~/neteoc
    steps:
      - checkout
-     - run: cd Source && dotnet publish
+     - run: cd Source && dotnet restore && dotnet publish
      - run: ls Source/bin/release/publish 
      - run: ssh neteoc:${netEocPass}@${boxIP} && echo $HOSTNAME
