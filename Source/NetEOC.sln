@@ -1,40 +1,37 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Auth", "Services\NetEOC.Auth\NetEOC.Auth.xproj", "{637DE143-21FE-4CCD-AC21-1A8BB0B3DB26}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Messaging", "Services\NetEOC.Messaging\NetEOC.Messaging.xproj", "{836E3B0C-DB81-4D07-AE6B-F792CF64CB35}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1C8AEE1E-909C-48CE-BC96-66FD744E0639}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{E0E3DEA6-3C5A-4676-98E8-E32B6329933A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Shared.Aws.DynamoDb", "Shared\NetEOC.Shared.Aws.DynamoDb\NetEOC.Shared.Aws.DynamoDb.xproj", "{71EA632F-1C0E-4691-B8E8-A06A5E19AC4C}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Shared.Configuration", "Shared\NetEOC.Shared.Configuration\NetEOC.Shared.Configuration.xproj", "{85E1DEF9-3B0A-4FF0-8083-50FEF1DF4125}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CDB5F0A-6D37-4104-846E-08528C70ACEC}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Shared.Util", "Shared\NetEOC.Shared.Util\NetEOC.Shared.Util.xproj", "{AEF92697-03D8-469F-9416-1F72F97D07D8}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Flare", "Services\NetEOC.Flare\NetEOC.Flare.xproj", "{70D21E65-4582-4E8F-B9AA-9122572B1A0C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD9EB12F-0AFB-4043-8C5E-F27A4FC28750}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Auth.Tests", "Tests\NetEOC.Auth.Tests\NetEOC.Auth.Tests.xproj", "{726661CC-A7BC-4450-A06D-73E7B7AAC429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Auth", "Services\NetEOC.Auth\NetEOC.Auth.csproj", "{637DE143-21FE-4CCD-AC21-1A8BB0B3DB26}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Flare.Tests", "Tests\NetEOC.Flare.Tests\NetEOC.Flare.Tests.xproj", "{F7476F9B-A73D-4CBD-A3F7-2477C836D6CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Messaging", "Services\NetEOC.Messaging\NetEOC.Messaging.csproj", "{836E3B0C-DB81-4D07-AE6B-F792CF64CB35}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Messaging.Tests", "Tests\NetEOC.Messaging.Tests\NetEOC.Messaging.Tests.xproj", "{FA172222-A11E-4F59-A6AC-AE416D1786A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Shared.Aws.DynamoDb", "Shared\NetEOC.Shared.Aws.DynamoDb\NetEOC.Shared.Aws.DynamoDb.csproj", "{71EA632F-1C0E-4691-B8E8-A06A5E19AC4C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Shared.Documentation", "Shared\NetEOC.Shared.Documentation\NetEOC.Shared.Documentation.xproj", "{13132BB5-03DE-41AC-8B32-93E54EB89F0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Shared.Configuration", "Shared\NetEOC.Shared.Configuration\NetEOC.Shared.Configuration.csproj", "{85E1DEF9-3B0A-4FF0-8083-50FEF1DF4125}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NetEOC.Shared.Mvc", "Shared\NetEOC.Shared.Mvc\NetEOC.Shared.Mvc.xproj", "{C0E62056-36C5-40D4-958D-F1FE58A36413}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Shared.Util", "Shared\NetEOC.Shared.Util\NetEOC.Shared.Util.csproj", "{AEF92697-03D8-469F-9416-1F72F97D07D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Flare", "Services\NetEOC.Flare\NetEOC.Flare.csproj", "{70D21E65-4582-4E8F-B9AA-9122572B1A0C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Auth.Tests", "Tests\NetEOC.Auth.Tests\NetEOC.Auth.Tests.csproj", "{726661CC-A7BC-4450-A06D-73E7B7AAC429}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Flare.Tests", "Tests\NetEOC.Flare.Tests\NetEOC.Flare.Tests.csproj", "{F7476F9B-A73D-4CBD-A3F7-2477C836D6CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Messaging.Tests", "Tests\NetEOC.Messaging.Tests\NetEOC.Messaging.Tests.csproj", "{FA172222-A11E-4F59-A6AC-AE416D1786A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Shared.Documentation", "Shared\NetEOC.Shared.Documentation\NetEOC.Shared.Documentation.csproj", "{13132BB5-03DE-41AC-8B32-93E54EB89F0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEOC.Shared.Mvc", "Shared\NetEOC.Shared.Mvc\NetEOC.Shared.Mvc.csproj", "{C0E62056-36C5-40D4-958D-F1FE58A36413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
