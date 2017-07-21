@@ -10,4 +10,4 @@ jobs:
      - checkout
      - run: cd Source && dotnet restore && dotnet publish
      - run: echo ${boxIP}
-     - run: sshpass -p "${netEocPass}" scp -r Source/Services/NetEOC.Auth/bin/Debug/netcoreapp1.0/publish neteoc@${boxIP}:/home/ubuntu/delme/
+     - run: sshpass -p "${netEocPass}" scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q Source/Services/NetEOC.Auth/bin/Debug/netcoreapp1.0/publish neteoc@${boxIP}:/home/ubuntu/delme/
